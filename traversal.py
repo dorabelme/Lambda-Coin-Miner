@@ -1,3 +1,6 @@
+import json
+import requests
+
 class Queue:
     def __init__(self):
         self.queue = []
@@ -134,5 +137,77 @@ def name_changer(name, API_KEY):
         "https://lambda-treasure-hunt.herokuapp.com/api/adv/change_name/",
         headers=header,
         data=json.dumps({"name":f"{name}"}),
+    )
+    return response
+
+def pray(API_KEY):
+    header = {
+        "Authorization": f"Token {API_KEY}",
+        "Content-Type": "application/json",
+    }
+    response = requests.post(
+        "https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/",
+        headers=header,
+        data=json.dumps(),
+    )
+    return response
+
+def flight(direction, API_KEY):
+    header = {
+        "Authorization": f"Token {API_KEY}",
+        "Content-Type": "application/json",
+    }
+    response = requests.post(
+        "https://lambda-treasure-hunt.herokuapp.com/api/adv/fly/",
+        headers=header,
+        data=json.dumps({"direction":f"{direction}"}),
+    )
+    return response
+
+def dash(direction, num_rooms, room_id, API_KEY):
+    header = {
+        "Authorization": f"Token {API_KEY}",
+        "Content-Type": "application/json",
+    }
+    response = requests.post(
+        "https://lambda-treasure-hunt.herokuapp.com/api/adv/dash/",
+        headers=header,
+        data=json.dumps({"direction":f"{direction}", "num_rooms": f"{num_rooms}", "next_room_ids":f"{room_id}"}),
+    )
+    return response
+
+def carry(treasure, API_KEY)
+    header = {
+        "Authorization": f"Token {API_KEY}",
+        "Content-Type": "application/json",
+    }
+    response = requests.post(
+        "https://lambda-treasure-hunt.herokuapp.com/api/adv/carry/",
+        headers=header,
+        data=json.dumps({"name":f"{treasure}"}),
+    )
+    return response
+    
+def receive( API_KEY)
+    header = {
+        "Authorization": f"Token {API_KEY}",
+        "Content-Type": "application/json",
+    }
+    response = requests.post(
+        "https://lambda-treasure-hunt.herokuapp.com/api/adv/receive/",
+        headers=header,
+        data=json.dumps(),
+    )
+    return response
+
+def warp(API_KEY)
+    header = {
+        "Authorization": f"Token {API_KEY}",
+        "Content-Type": "application/json",
+    }
+    response = requests.post(
+        "https://lambda-treasure-hunt.herokuapp.com/api/adv/warp/",
+        headers=header,
+        data=json.dumps(),
     )
     return response
