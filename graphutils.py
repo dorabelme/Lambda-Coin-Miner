@@ -41,11 +41,15 @@ class Graph:
         self.rooms = {}
         self.vertices = {}
 
-    def add_room(self, room):
+    def add_room(self, room, from_file=False):
         """
         Add a room to the graph.
         """
-        if room["room_id"] not in self.rooms:
+        if from_file:
+            self.rooms[room["room_id"]] = room
+            self.vertices[room["room_id"]] = set(
+                [room for direction, room in room["room_id"]["exits"]])
+        elif room["room_id"] not in self.rooms:
             self.rooms[room["room_id"]] = room
             self.rooms[room["room_id"]]["exits"] = {
                 x: '?' for x in room["exits"]}
