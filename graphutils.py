@@ -235,6 +235,6 @@ class Graph:
 
 
 # TEST FILE LOADING
-# graph = Graph()
-# graph.load_graph('map.json')
-# print(json.dumps(graph.rooms))
+graph = Graph()
+graph.load_graph('map.json')
+print(json.dumps(graph.rooms))
