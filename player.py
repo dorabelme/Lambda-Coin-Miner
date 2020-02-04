@@ -1,0 +1,15 @@
+class Player:
+    def __init__(self, name='User', starting_room):
+        self.name = name,
+        self.current_room = starting_room,
+        self.cooldown = 1,
+        self.encumbrance: 2,
+        self.strength = 0,
+        self.speed = 0,
+        self.gold = 0,
+        self.bodywear = None,
+        self.footwear = None,
+        self.inventory = [],
+        self.status = [],
+        self.errors = [],
+        self.messages = [],

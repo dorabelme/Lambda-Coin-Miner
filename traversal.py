@@ -1,6 +1,14 @@
 import json
 import requests
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
+
+
+
 class Queue:
     def __init__(self):
         self.queue = []
@@ -20,6 +28,8 @@ def bfs(self, starting_vertex, destination_vertex, player_location):
         starting_vertex to destination_vertex in
         breath-first order.
         """
+        ##Change bfs to take treasure, and then revert to shop at 9 treasure?
+        #Check status at each treasure pick up
         q = Queue()
         # stack a list to use as our path
         q.enqueue([starting_vertex])
@@ -176,7 +186,7 @@ def dash(direction, num_rooms, room_id, API_KEY):
     )
     return response
 
-def carry(treasure, API_KEY)
+def carry(treasure, API_KEY):
     header = {
         "Authorization": f"Token {API_KEY}",
         "Content-Type": "application/json",
@@ -188,7 +198,7 @@ def carry(treasure, API_KEY)
     )
     return response
     
-def receive( API_KEY)
+def receive( API_KEY):
     header = {
         "Authorization": f"Token {API_KEY}",
         "Content-Type": "application/json",
@@ -200,7 +210,7 @@ def receive( API_KEY)
     )
     return response
 
-def warp(API_KEY)
+def warp(API_KEY):
     header = {
         "Authorization": f"Token {API_KEY}",
         "Content-Type": "application/json",
