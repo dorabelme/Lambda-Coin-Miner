@@ -1,3 +1,5 @@
+import json
+
 
 class Queue():
     def __init__(self):
@@ -41,6 +43,21 @@ class Graph:
         self.rooms = {}
         self.vertices = {}
 
+    def load_graph(self, filename):
+        """
+        Load graph from file.
+        """
+        try:
+            with open(filename) as json_file:
+                data = json.load(json_file)
+                print(len(data))
+                for room in data:
+                    self.add_room(data[room], from_file=True)
+        except IOError as e:
+            print(e)
+        finally:
+            print("Graph loaded successfully!")
+
     def add_room(self, room, from_file=False):
         """
         Add a room to the graph.
@@ -48,7 +65,7 @@ class Graph:
         if from_file:
             self.rooms[room["room_id"]] = room
             self.vertices[room["room_id"]] = set(
-                [room for direction, room in room["room_id"]["exits"]])
+                [room_id for room_id in room["exits"].values()])
         elif room["room_id"] not in self.rooms:
             self.rooms[room["room_id"]] = room
             self.rooms[room["room_id"]]["exits"] = {
@@ -215,3 +232,9 @@ class Graph:
                     q.enqueue(new_path)
 
         return None
+
+
+# TEST FILE LOADING
+# graph = Graph()
+# graph.load_graph('map.json')
+# print(json.dumps(graph.rooms))
