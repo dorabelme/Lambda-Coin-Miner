@@ -206,6 +206,10 @@ class Player:
             headers=balance_header,
             cooldown=self.cooldown
         )
+        
+        self.cooldown = response["cooldown"]
+        time.sleep(self.cooldown)
+        self.status_update()
         return response
 
     def name_changer(self, name):
@@ -239,7 +243,7 @@ class Player:
         )
 
         print(response)
-
+        self.cooldown = response["cooldown"]
         time.sleep(self.cooldown)
         self.status_update()
         return response
@@ -257,6 +261,8 @@ class Player:
             cooldown=self.cooldown
         )
 
+        print(response)
+
         self.current_room = response["room_id"]
         self.room_items = response["items"]
         self.room_exits = response["exits"]
@@ -264,6 +270,7 @@ class Player:
         self.messages = response["messages"]
         self.cooldown = response["cooldown"]
 
+        time.sleep(self.cooldown)
         return response
 
     def dash(self, direction, num_rooms, room_id):
@@ -287,6 +294,7 @@ class Player:
         self.messages = response["messages"]
         self.cooldown = response["cooldown"]
 
+        time.sleep(self.cooldown)
         return response
 
     def carry(self, treasure):
@@ -301,6 +309,10 @@ class Player:
             data={"name": f"{treasure}"},
             cooldown=self.cooldown
         )
+
+        self.cooldown = response["cooldown"]
+        time.sleep(self.cooldown)
+        self.status_update()
         return response
 
     def receive(self):
@@ -314,6 +326,10 @@ class Player:
             headers=header,
             cooldown=self.cooldown
         )
+
+        self.cooldown = response["cooldown"]
+        time.sleep(self.cooldown)
+        self.status_update()
         return response
 
     def warp(self):
@@ -334,8 +350,10 @@ class Player:
         self.room_exits = response["exits"]
         self.errors = response["errors"]
         self.messages = response["messages"]
-        self.cooldown = response["cooldown"]
+        # self.cooldown = response["cooldown"]
 
+        self.cooldown = response["cooldown"]
+        time.sleep(self.cooldown)
         return response
 
     def wear_item(self, item):
@@ -351,6 +369,7 @@ class Player:
             cooldown=self.cooldown
         )
 
+        self.cooldown = response["cooldown"]
         time.sleep(self.cooldown)
         self.status_update()
         return response

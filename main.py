@@ -5,7 +5,7 @@ import random
 import os
 
 from mine import proof_of_work, valid_proof
-from helper_functions import handle_items, move_to_location
+from helper_functions import handle_items, move_to_location, mine
 from graphutils import graph
 from player import Player
 from dreamy import dreamy
@@ -66,36 +66,11 @@ while player.gold < 1000 and "User" in player.name:
             player.sell_treasure(item)
             print(player.gold)
 
-    # Try to use wise explorer instead of move endpoint
-    # for m in traversal:
-    # room = player.current_room
-    # exits = map.json[room]["exits"]
-    # for direction, roomID in exits:
-    #     if roomID == m:
-    # response = wise_explorer(m[0], API_KEY, m[1])
-    # cooldown = response["cooldown"]
-    # time.sleep(cooldown)
-    # if "errors" in response:
-    #     print(response["errors"])
-
-    # Sell the item
-    # for item in player.inventory:
-    #     sell_treasure(item, API_KEY)
 
 # While 1000 gold, make way to pirate ry.
 while player.gold >= 1000:
     path = graph.bfs(player.current_room, 467)
     move_to_location(player, path)
-    # for m in path:
-    # room = player.current_room
-    # exits = map.json[room]["exits"]
-    # for direction, roomID in exits:
-    #     if roomID == m:
-    # wise_explorer(m[0], API_KEY, m[1])
-    # cooldown = response["cooldown"]
-    # time.sleep(cooldown)
-    # if "errors" in response:
-    #     print(response["errors"])
 
     # At pirate ry, change name.
     name = NAME
@@ -111,40 +86,50 @@ while player.gold >= 1000:
 # print("PRAYING!")
 # player.pray()
 
-# path = graph.bfs(374, 461)
-# move_to_location(player, path)
-# player.pray()
-
+path = graph.bfs(player.current_room, 461)
+move_to_location(player, path)
+print("Praying for dash")
+player.pray()
+exit()
 
 # Move from pirate ry to the well to solve puzzle with ls-8
-# print("Heading to the well!")
-# path = graph.bfs(player.current_room, 55)
-# move_to_location(player, path)
-# response = player.init_player()
-# print(response)
-# response = player.examine(treasure="Wishing Well")
-# print(response)
-# Solve the puzzle
 
-# Move from the well to the new location
-print("Heading to the mine!")
-path = graph.bfs(player.current_room, ROOM_NR)
-move_to_location(player, path)
-response = player.init_player()
-print(response)
+for i in range(0, 100):
+    print("Heading to the well!")
+    path = graph.bfs(player.current_room, 55)
+    move_to_location(player, path)
+    response = player.init_player()
+    print(response)
+    response = player.examine(treasure="Wishing Well")
+    print(response)
+    # Solve the puzzle
+    # Write response to hint.ls8
+    # Get back a number
+
+    # Move from the well to the new location
+    print("Heading to the mine!")
+    path = graph.bfs(player.current_room, ROOM_NR)
+    move_to_location(player, path)
+    response = player.init_player()
+    print(response)
 
 
-# Mine at new location
-header = {
-    "Authorization": f"Token {API_KEY}",
-    "Content-Type": "application/json",
-}
-response = dreamy.get(
-    f"{URL}/api/bc/last_proof/", headers=header)
-last_bl = response["proof"]
-new_proof = proof_of_work(last_bl)
-data = {"proof": new_proof}
-response = dreamy.post(
-    f"{URL}/api/bc/mine/", headers=header, data=data)
+    # Mine at new location
+    mine(player)
 
-print(response)
+    if response["messages"] == "New Block Forged":
+        path = graph.bfs(player.current_room, 55)
+        move_to_location(player, path)
+
+    # header = {
+    #     "Authorization": f"Token {API_KEY}",
+    #     "Content-Type": "application/json",
+    # }
+    # response = dreamy.get(
+    #     f"{URL}/api/bc/last_proof/", headers=header)
+    # last_bl = response["proof"]
+    # new_proof = proof_of_work(last_bl)
+    # data = {"proof": new_proof}
+    # response = dreamy.post(
+    #     f"{URL}/api/bc/mine/", headers=header, data=data)
+    # print(response)

@@ -237,7 +237,7 @@ class CPU:
 
         with open(program) as f:
             for line in f:
-                comment_split = line.split('#')
+                comment_split = line.split('\n')
                 num = comment_split[0].strip()
 
                 if num == '':
@@ -314,6 +314,50 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
+        running = True
+
+        while running:
+            instruction_register = self.ram_read(self.pc)
+            # print(instruction_register)
+
+            operand_a = self.ram_read(self.pc + 1)
+            operand_b = self.ram_read(self.pc + 2)
+
+            # print(instruction_register, operand_a, operand_b)
+
+            try:
+                f = self.commands[instruction_register]
+                # print(f)
+                operation_op = f(operand_a, operand_b)
+                running = operation_op[1]
+                self.pc += operation_op[0]
+
+            except Exception as e:
+                print(f"Error: Instruction {instruction_register} not found!")
+                # print(e)
+                sys.exit(1)
+        running = True
+
+        while running:
+            instruction_register = self.ram_read(self.pc)
+            # print(instruction_register)
+
+            operand_a = self.ram_read(self.pc + 1)
+            operand_b = self.ram_read(self.pc + 2)
+
+            # print(instruction_register, operand_a, operand_b)
+
+            try:
+                f = self.commands[instruction_register]
+                # print(f)
+                operation_op = f(operand_a, operand_b)
+                running = operation_op[1]
+                self.pc += operation_op[0]
+
+            except Exception as e:
+                print(f"Error: Instruction {instruction_register} not found!")
+                # print(e)
+                sys.exit(1)
         running = True
 
         while running:
