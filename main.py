@@ -1,50 +1,53 @@
 import time
 import requests
 import hashlib
+import random
 
 # from traversal import take_treasure, status_inventory, sell_treasure, wise_explorer, movement, name_changer, pray
 from mine import proof_of_work, valid_proof
 from graphutils import graph
 from player import Player
+from dreamy import dreamy
 
-from dotenv import load_dotenv
-import os
+player = Player()
+print(f"Current cooldown: {player.cooldown}")
 
-
-load_dotenv()
-API_KEY = os.getenv("API_KEY")
-print(API_KEY)
-MAIN_URL = os.getenv("MAIN_URL")
-print(MAIN_URL)
-TEST_URL = os.getenv("TEST_URL")
-print(TEST_URL)
-
-headers = {"Authorization": f"Token {API_KEY}"}
-response = requests.get(
-    "https://treasure-hunt-test.herokuapp.com/api/adv/init/", headers=headers).json()
-print(response)
-player = Player(response["room_id"], API_KEY)
-print(player.gold)
-
-# player.current_room = response.json()["room_id"]
-# player.cooldown = response.json()["cooldown"]
-
-
+print("Hunting for treasure!")
+print(f"Current gold: {player.gold}")
+visited = set({})
 # Once we have a name, we no longer collect gold. So I guess this part goes in a while loop. While no name or not 1000 gold, we traverse the map for treasure
-while player.gold < 1000 and player.name is "User":
+while player.gold < 1000 and "User" in player.name:
+    while player.encumbrance < player.strength - 1:
+        visited.add(player.current_room)
+
+        exits = graph.rooms[player.current_room]["exits"]
+        unvisited = {direction: room for direction,
+                     room in exits.items() if room not in visited}
+        if unvisited:
+            exits = unvisited
+
+        direction = random.choice([d for d in exits])
+
+        print(f"Moving {direction}...")
+        player.wise_explorer(direction, exits[direction])
+        print(f"Player moved {direction} to room {player.current_room}")
+
+        if player.room_items and any([t for t in player.room_items if "treasure" in t]):
+            print("Found treasure! Taking it...")
+            player.take_treasure("tiny treasure")
+            print(f"Took treasure. Current items: {player.inventory}")
 
     # Go to random room
     # On the way to random room, we need to examine the room each time we enter a new one. So if new room, call function examine
     # if there are items in the room, then we take those items up until we have 9 items.
     # When we hit 9 items, we should return to the shop from our current room.
-    handle_items()
+    # handle_items()
 
-
-# Go back to the shop and sell the item
-# traversal = bfs(player.current_room, 1)
-# move_to_location(traversal)
-# Try to use wise explorer instead of move endpoint
-# for m in traversal:
+    # Go back to the shop and sell the item
+    # traversal = bfs(player.current_room, 1)
+    # move_to_location(traversal)
+    # Try to use wise explorer instead of move endpoint
+    # for m in traversal:
     # room = player.current_room
     # exits = map.json[room]["exits"]
     # for direction, roomID in exits:
@@ -55,12 +58,11 @@ while player.gold < 1000 and player.name is "User":
     # if "errors" in response:
     #     print(response["errors"])
 
-# Sell the item
-# for item in player.inventory:
-#     sell_treasure(item, API_KEY)
+    # Sell the item
+    # for item in player.inventory:
+    #     sell_treasure(item, API_KEY)
 
-
-# While 1000 gold, make way to pirate ry.
+    # While 1000 gold, make way to pirate ry.
 while player.gold >= 1000:
     path = graph.bfs(player.current_room, 467)
     move_to_location(path)
