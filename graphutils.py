@@ -237,9 +237,8 @@ class Graph:
 # TEST FILE LOADING
 graph = Graph()
 graph.load_graph('map.json')
-# print(json.dumps(graph.rooms))
+# # print(json.dumps(graph.rooms))
 
 
-path  = graph.bfs(0, 495)
-print(path)
-
+# path  = graph.bfs(0, 495)
+# print(path)
