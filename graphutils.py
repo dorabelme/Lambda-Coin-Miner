@@ -113,7 +113,7 @@ class Graph:
             next_room = path.pop(0)
             reverse_keys = {value: key for key,
                             value in self.rooms[current_room]["exits"].items()}
-            traversal.append(reverse_keys[next_room])
+            traversal.append((reverse_keys[next_room], next_room))
             current_room = next_room
         return traversal
 
@@ -218,7 +218,7 @@ class Graph:
             current_vertex = path[-1]
             # And if it is the current vertex, we're done searching
             if current_vertex == destination_vertex:
-                return path
+                return self.path_to_directions(path)
 
             print(current_vertex, visited)
             # If the vertex has not been visited
@@ -237,4 +237,8 @@ class Graph:
 # TEST FILE LOADING
 graph = Graph()
 graph.load_graph('map.json')
-print(json.dumps(graph.rooms))
+# print(json.dumps(graph.rooms))
+
+
+path = graph.bfs(0, 495)
+print(path)
