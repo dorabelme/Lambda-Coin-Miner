@@ -322,3 +322,20 @@ class Player:
         self.cooldown = response["cooldown"]
 
         return response
+
+    def wear_item(self, item):
+        header = {
+            "Authorization": f"Token {API_KEY}",
+            "Content-Type": "application/json",
+        }
+
+        response = dreamy.post(
+            f"{URL}/api/adv/wear/",
+            headers=header,
+            data={"name": f"{item}"},
+            cooldown=self.cooldown
+        )
+
+        time.sleep(self.cooldown)
+        self.status_update()
+        return response
