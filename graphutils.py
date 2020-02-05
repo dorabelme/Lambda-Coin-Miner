@@ -120,8 +120,7 @@ class Graph:
     def explore_bfs(self, starting_room):
         """
         Return a list containing the shortest path from
-        starting_room to destination_room in
-        breadth-first order.
+        starting_room to unexplored room.
         """
 
         # Create an empty queue and enqueue the starting room ID

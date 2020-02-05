@@ -17,17 +17,10 @@ URL = MAIN_URL if not TESTING else TEST_URL
 class Player:
     def __init__(self):
         # Get current room and cooldown
-        response = self.init_player()
-        # print(response)
-        self.current_room = response["room_id"]
-        self.cooldown = response["cooldown"]
-
-        time.sleep(self.cooldown)
+        self.init_player()
 
         # Get player stats
-        response = self.status_update()
-        # print(response)
-        self.cooldown = response["cooldown"]
+        self.status_update()
 
     def add_to_inventory(self, item):
         self.inventory.append(item)
@@ -42,6 +35,14 @@ class Player:
             f"{URL}/api/adv/init/",
             headers=header
         )
+
+        self.current_room = response["room_id"]
+        self.room_items = response["items"]
+        self.room_exits = response["exits"]
+        self.errors = response["errors"]
+        self.messages = response["messages"]
+        self.cooldown = response["cooldown"]
+
         return response
 
     def status_update(self):
@@ -56,6 +57,7 @@ class Player:
             cooldown=self.cooldown
         )
 
+        self.name = response["name"]
         self.cooldown = response["cooldown"]
         self.encumbrance = response["encumbrance"]
         self.strength = response["strength"]
@@ -90,6 +92,14 @@ class Player:
             data={"direction": direction},
             cooldown=self.cooldown
         )
+
+        self.current_room = response["room_id"]
+        self.room_items = response["items"]
+        self.room_exits = response["exits"]
+        self.errors = response["errors"]
+        self.messages = response["messages"]
+        self.cooldown = response["cooldown"]
+
         return response
 
     def wise_explorer(self, direction, room_id):
@@ -104,6 +114,14 @@ class Player:
             data={"direction": direction, "next_room_id": str(room_id)},
             cooldown=self.cooldown
         )
+
+        self.current_room = response["room_id"]
+        self.room_items = response["items"]
+        self.room_exits = response["exits"]
+        self.errors = response["errors"]
+        self.messages = response["messages"]
+        self.cooldown = response["cooldown"]
+
         return response
 
     def take_treasure(self, treasure):
@@ -118,6 +136,8 @@ class Player:
             data={"name": f"{treasure}"},
             cooldown=self.cooldown
         )
+
+        self.status_update()
         return response
 
     def drop_treasure(self, treasure):
@@ -132,6 +152,8 @@ class Player:
             data={"name": f"{treasure}"},
             cooldown=self.cooldown
         )
+
+        self.status_update()
         return response
 
     def sell_treasure(self, treasure):
@@ -146,6 +168,8 @@ class Player:
             data={"name": f"{treasure}", "confirm": "yes"},
             cooldown=self.cooldown
         )
+
+        self.status_update()
         return response
 
     def examine(self, treasure, player):
@@ -174,6 +198,8 @@ class Player:
             data={"name": f"{name}"},
             cooldown=self.cooldown
         )
+
+        self.status_update()
         return response
 
     def pray(self):
@@ -187,6 +213,8 @@ class Player:
             headers=header,
             cooldown=self.cooldown
         )
+
+        self.status_update()
         return response
 
     def flight(self, direction):
@@ -201,6 +229,14 @@ class Player:
             data={"direction": f"{direction}"},
             cooldown=self.cooldown
         )
+
+        self.current_room = response["room_id"]
+        self.room_items = response["items"]
+        self.room_exits = response["exits"]
+        self.errors = response["errors"]
+        self.messages = response["messages"]
+        self.cooldown = response["cooldown"]
+
         return response
 
     def dash(self, direction, num_rooms, room_id):
@@ -216,6 +252,14 @@ class Player:
                   "num_rooms": f"{num_rooms}", "next_room_ids": f"{room_id}"},
             cooldown=self.cooldown
         )
+
+        self.current_room = response["room_id"]
+        self.room_items = response["items"]
+        self.room_exits = response["exits"]
+        self.errors = response["errors"]
+        self.messages = response["messages"]
+        self.cooldown = response["cooldown"]
+
         return response
 
     def carry(self, treasure):
@@ -257,4 +301,12 @@ class Player:
             data={"name": f"{treasure}"},
             cooldown=self.cooldown
         )
+
+        self.current_room = response["room_id"]
+        self.room_items = response["items"]
+        self.room_exits = response["exits"]
+        self.errors = response["errors"]
+        self.messages = response["messages"]
+        self.cooldown = response["cooldown"]
+
         return response
