@@ -1,5 +1,6 @@
 from dreamy import dreamy
 from mine import proof_of_work, valid_proof
+from graphutils import Queue
 
 def handle_items(player, item):
     player.take_treasure(item)
@@ -9,6 +10,10 @@ def handle_items(player, item):
 
 
 def move_to_location(player, path):
+    # queue = Queue()
+    # prev_dir = None
+    # for m in path:
+        
     distance = len(path)
     for m in path:
         print(f"{distance} steps away from your destination")
