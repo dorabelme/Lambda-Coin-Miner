@@ -220,7 +220,7 @@ class Graph:
             if current_vertex == destination_vertex:
                 return self.path_to_directions(path)
 
-            # print(current_vertex, visited)
+            print(current_vertex, visited)
             # If the vertex has not been visited
             if current_vertex not in visited:
                 # Mark it as visited
@@ -240,6 +240,5 @@ graph.load_graph('map.json')
 # print(json.dumps(graph.rooms))
 
 
-path  = graph.bfs(0, 495)
+path = graph.bfs(0, 495)
 print(path)
-
