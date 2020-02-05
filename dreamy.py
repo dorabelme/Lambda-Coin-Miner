@@ -26,7 +26,6 @@ class Dreamy:
                 print("Response returned:")
                 print(response)
 
-        time.sleep(cooldown)
         return response
 
     def post(self, URL=None, headers=None, data={}, cooldown=1):
@@ -52,7 +51,6 @@ class Dreamy:
                 print("Response returned:")
                 print(response)
 
-        time.sleep(cooldown)
         return response
 
 

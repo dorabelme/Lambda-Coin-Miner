@@ -43,9 +43,13 @@ class Player:
         self.messages = response["messages"]
         self.cooldown = response["cooldown"]
 
+        time.sleep(self.cooldown)
         return response
 
     def status_update(self):
+        print("Status update")
+        print(self.cooldown)
+        time.sleep(1)
         status_header = {
             "Authorization": f"Token {API_KEY}",
             "Content-Type": "application/json",
@@ -58,7 +62,7 @@ class Player:
         )
 
         self.name = response["name"]
-        self.cooldown = response["cooldown"]
+        # self.cooldown = response["cooldown"]
         self.encumbrance = response["encumbrance"]
         self.strength = response["strength"]
         self.speed = response["speed"]
@@ -78,6 +82,9 @@ class Player:
         self.errors = response["errors"]
         self.messages = response["messages"]
 
+
+        time.sleep(self.cooldown)
+        print(self.cooldown)
         return response
 
     def movement(self, direction):
@@ -100,6 +107,7 @@ class Player:
         self.messages = response["messages"]
         self.cooldown = response["cooldown"]
 
+        time.sleep(self.cooldown)
         return response
 
     def wise_explorer(self, direction, room_id):
@@ -122,6 +130,7 @@ class Player:
         self.messages = response["messages"]
         self.cooldown = response["cooldown"]
 
+        time.sleep(self.cooldown)
         return response
 
     def take_treasure(self, treasure):
@@ -137,6 +146,7 @@ class Player:
             cooldown=self.cooldown
         )
 
+        time.sleep(self.cooldown)
         self.status_update()
         return response
 
@@ -169,6 +179,7 @@ class Player:
             cooldown=self.cooldown
         )
 
+        time.sleep(self.cooldown)
         self.status_update()
         return response
 
@@ -199,6 +210,7 @@ class Player:
             cooldown=self.cooldown
         )
 
+        time.sleep(self.cooldown)
         self.status_update()
         return response
 
@@ -214,6 +226,7 @@ class Player:
             cooldown=self.cooldown
         )
 
+        time.sleep(self.cooldown)
         self.status_update()
         return response
 

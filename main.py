@@ -10,30 +10,32 @@ from player import Player
 from dreamy import dreamy
 
 player = Player()
+print(f"Current cooldown: {player.cooldown}")
 
 print("Hunting for treasure!")
 print(f"Current gold: {player.gold}")
+visited = set({})
 # Once we have a name, we no longer collect gold. So I guess this part goes in a while loop. While no name or not 1000 gold, we traverse the map for treasure
 while player.gold < 1000 and "User" in player.name:
     while player.encumbrance < player.strength - 1:
-        visited = set({player.current_room})
+        visited.add(player.current_room)
+
+        exits = graph.rooms[player.current_room]["exits"]
+        unvisited = {direction: room for direction,
+                        room in exits.items() if room not in visited}
+        if unvisited:
+            exits = unvisited
+
+        direction = random.choice([d for d in exits])
+
+        print(f"Moving {direction}...")
+        player.wise_explorer(direction, exits[direction])
+        print(f"Player moved {direction} to room {player.current_room}")
 
         if player.room_items and any([t for t in player.room_items if "treasure" in t]):
             print("Found treasure! Taking it...")
             player.take_treasure("tiny treasure")
-            print(f"Took treasure. Current items: {player.items}")
-        else:
-            exits = graph.rooms[player.current_room]["exits"]
-            unvisited = {direction: room for direction,
-                         room in exits.items() if room not in visited}
-            if unvisited:
-                exits = unvisited
-
-            direction = random.choice([d for d in exits])
-
-            print(f"Moving {direction}...")
-            player.movement(direction)
-            print(f"Player moved {direction} to room {player.current_room}")
+            print(f"Took treasure. Current items: {player.inventory}")
 
     # Go to random room
     # On the way to random room, we need to examine the room each time we enter a new one. So if new room, call function examine
