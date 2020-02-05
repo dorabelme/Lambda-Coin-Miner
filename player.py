@@ -47,9 +47,8 @@ class Player:
         return response
 
     def status_update(self):
-        print("Status update")
-        print(self.cooldown)
-        time.sleep(1)
+        print(f"Status update. Cooldown: {self.cooldown}")
+        time.sleep(self.cooldown)
         status_header = {
             "Authorization": f"Token {API_KEY}",
             "Content-Type": "application/json",

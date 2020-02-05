@@ -219,7 +219,7 @@ class Graph:
             if current_vertex == destination_vertex:
                 return self.path_to_directions(path)
 
-            # print(current_vertex, visited)
+            print(current_vertex, visited)
             # If the vertex has not been visited
             if current_vertex not in visited:
                 # Mark it as visited

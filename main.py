@@ -22,7 +22,7 @@ while player.gold < 1000 and "User" in player.name:
 
         exits = graph.rooms[player.current_room]["exits"]
         unvisited = {direction: room for direction,
-                        room in exits.items() if room not in visited}
+                     room in exits.items() if room not in visited}
         if unvisited:
             exits = unvisited
 
