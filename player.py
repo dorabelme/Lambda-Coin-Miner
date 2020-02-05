@@ -3,15 +3,17 @@ import os
 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
+MAIN_URL = os.getenv("MAIN_URL")
+TEST_URL = os.getenv("TEST_URL")
 
 
 class Player:
-    def __init__(self, name='User', starting_room):
+    def __init__(self, starting_room, name = "User"):
         self.name = name,
         self.self.API_KEY,
         self.current_room = starting_room,
         self.cooldown = 1,
-        self.encumbrance: 2,
+        self.encumbrance = 2,
         self.strength = 0,
         self.speed = 0,
         self.gold = 0,
@@ -38,7 +40,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/move/",
+                    f"{TEST_URL}/api/adv/move/",
                     headers=movement_header,
                     data=json.dumps({"direction": direction}),
                 ).json()
@@ -61,7 +63,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/move/",
+                    f"{TEST_URL}api/adv/move/",
                     headers=movement_header,
                     data=json.dumps({"direction": direction, "next_room_id": str(room_id)})
                 ).json()
@@ -84,7 +86,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/take/",
+                    f"{TEST_URL}api/adv/take/",
                     headers=treasure_header,
                     data=json.dumps({"name": f"{treasure}"}),
                 ).json()
@@ -107,7 +109,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/drop/",
+                    f"{TEST_URL}api/adv/drop/",
                     headers=treasure_header,
                     data=json.dumps({"name": f"{treasure}"}),
                 ).json()
@@ -130,7 +132,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/sell/",
+                    f"{TEST_URL}api/adv/sell/",
                     headers=treasure_header,
                     data=json.dumps({"name": f"{treasure}", "confirm": "yes"}),
                 ).json()
@@ -153,7 +155,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/status/",
+                    f"{TEST_URL}api/adv/status/",
                     headers=inventory_header,
                     data=json.dumps(),
                 ).json()
@@ -176,7 +178,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/examine/",
+                    f"{TEST_URL}api/adv/examine/",
                     headers=inventory_header,
                     data=json.dumps({"name":f"{treasure or player}"}),
                 ).json()
@@ -199,7 +201,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/change_name/",
+                    f"{TEST_URL}api/adv/change_name/",
                     headers=header,
                     data=json.dumps({"name":f"{name}"}),
                 ).json()
@@ -222,7 +224,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/",
+                    f"{TEST_URL}api/adv/pray/",
                     headers=header,
                     data=json.dumps(),
                 ).json()
@@ -241,7 +243,7 @@ class Player:
             "Content-Type": "application/json",
         }
         response = requests.post(
-            "https://lambda-treasure-hunt.herokuapp.com/api/adv/fly/",
+            f"{TEST_URL}api/adv/fly/",
             headers=header,
             data=json.dumps({"direction":f"{direction}"}),
         )
@@ -250,7 +252,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/fly/",
+                    f"{TEST_URL}api/adv/fly/",
                     headers=header,
                     data=json.dumps({"direction":f"{direction}"}),
                 ).json()
@@ -273,7 +275,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/dash/",
+                    f"{TEST_URL}api/adv/dash/",
                     headers=header,
                     data=json.dumps({"direction":f"{direction}", "num_rooms": f"{num_rooms}", "next_room_ids":f"{room_id}"}),
                 ).json()
@@ -296,7 +298,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/carry/",
+                    f"{TEST_URL}api/adv/carry/",
                     headers=header,
                     data=json.dumps({"name":f"{treasure}"}),
                 ).json()
@@ -319,7 +321,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/receive/",
+                    f"{TEST_URL}api/adv/receive/",
                     headers=header,
                     data=json.dumps(),
                 ).json()
@@ -342,7 +344,7 @@ class Player:
         while not successful:
             try:
                 response = requests.post(
-                    "https://lambda-treasure-hunt.herokuapp.com/api/adv/warp/",
+                    f"{TEST_URL}api/adv/warp/",
                     headers=header,
                     data=json.dumps(),
                 ).json()

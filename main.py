@@ -4,19 +4,28 @@ import hashlib
 
 # from traversal import take_treasure, status_inventory, sell_treasure, wise_explorer, movement, name_changer, pray
 from mine import proof_of_work, valid_proof
-from graphutils import bfs
+from graphutils import graph
 from player import Player
 
 from dotenv import load_dotenv
 import os
 
+
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
+print(API_KEY)
+MAIN_URL = os.getenv("MAIN_URL")
+print(MAIN_URL)
+TEST_URL = os.getenv("TEST_URL")
+print(TEST_URL)
 
 header = {"Authorization": f"Token {API_KEY}"}
-response = requests.get("https://lambda-treasure-hunt.herokuapp.com/api/adv/init/", headers=header)
-player.current_room = response.json()["room_id"]
-player.cooldown = response.json()["cooldown"]
+response = requests.get("https://treasure-hunt-test.herokuapp.com/api/adv/init/", headers=header)
+print(response)
+player = Player(response.room_id)
+
+# player.current_room = response.json()["room_id"]
+# player.cooldown = response.json()["cooldown"]
 
 
 ## Once we have a name, we no longer collect gold. So I guess this part goes in a while loop. While no name or not 1000 gold, we traverse the map for treasure
@@ -51,7 +60,7 @@ while player.gold < 1000 and player.name is "User":
 
 ## While 1000 gold, make way to pirate ry.
 while player.gold >= 1000:
-    path = bfs(player.current_room, 467)
+    path = graph.bfs(player.current_room, 467)
     move_to_location(path)
     # for m in path:
     # room = player.current_room
@@ -70,11 +79,11 @@ while player.gold >= 1000:
     time.sleep(cooldown)
 
 ## Go to the shrine, and use pray function
-path = bfs(player.current_room, 374)
+path = graph.bfs(player.current_room, 374)
 move_to_location(path)
 pray(API_KEY)
 
-path = bfs(374, 461)
+path = graph.bfs(374, 461)
 move_to_location(path)
 pray(API_KEY)
 
@@ -82,7 +91,7 @@ pray(API_KEY)
 
 
 ## Move from pirate ry to the well to solve puzzle with ls-8
-path = bfs(461, 55)
+path = graph.bfs(461, 55)
 move_to_location(path)
 ## Solve the puzzle
 
