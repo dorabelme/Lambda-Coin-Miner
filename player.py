@@ -9,7 +9,7 @@ TEST_API_KEY = os.getenv("TEST_API_KEY")
 MAIN_URL = os.getenv("MAIN_URL")
 TEST_URL = os.getenv("TEST_URL")
 
-TESTING = True
+TESTING = False
 API_KEY = MAIN_API_KEY if not TESTING else TEST_API_KEY
 URL = MAIN_URL if not TESTING else TEST_URL
 
@@ -80,7 +80,6 @@ class Player:
         self.status = response["status"]
         self.errors = response["errors"]
         self.messages = response["messages"]
-
 
         time.sleep(self.cooldown)
         print(self.cooldown)
@@ -182,7 +181,7 @@ class Player:
         self.status_update()
         return response
 
-    def examine(self, treasure, player):
+    def examine(self, treasure, player=None):
         inventory_header = {
             "Authorization": f"Token {API_KEY}",
             "Content-Type": "application/json",
@@ -196,6 +195,19 @@ class Player:
         )
         return response
 
+    def balance(self):
+        balance_header = {
+            "Authorization": f"Token {API_KEY}",
+            "Content-Type": "application/json",
+        }
+
+        response = dreamy.get(
+            f"{URL}/api/bc/get_balance/",
+            headers=balance_header,
+            cooldown=self.cooldown
+        )
+        return response
+
     def name_changer(self, name):
         header = {
             "Authorization": f"Token {API_KEY}",
@@ -205,9 +217,10 @@ class Player:
         response = dreamy.post(
             f"{URL}/api/adv/change_name/",
             headers=header,
-            data={"name": f"{name}"},
+            data={"name": f"{name}", "confirm": "aye"},
             cooldown=self.cooldown
         )
+        print(response)
 
         time.sleep(self.cooldown)
         self.status_update()
@@ -224,6 +237,8 @@ class Player:
             headers=header,
             cooldown=self.cooldown
         )
+
+        print(response)
 
         time.sleep(self.cooldown)
         self.status_update()

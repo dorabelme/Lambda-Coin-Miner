@@ -6,10 +6,10 @@ def handle_items(player, item):
         player.wear_item(item)
 
 
-
 def move_to_location(player, path):
     for m in path:
         player.wise_explorer(m[0], m[1])
+        print(f"Moving {m[0]} to room {m[1]}")
         # cooldown = response["cooldown"]
         # time.sleep(cooldown)
         # if "errors" in response:

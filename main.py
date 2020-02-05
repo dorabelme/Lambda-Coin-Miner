@@ -17,8 +17,9 @@ TEST_API_KEY = os.getenv("TEST_API_KEY")
 MAIN_URL = os.getenv("MAIN_URL")
 TEST_URL = os.getenv("TEST_URL")
 NAME = os.getenv("NAME")
+ROOM_NR = os.getenv("ROOM_NR")
 
-TESTING = True
+TESTING = False
 API_KEY = MAIN_API_KEY if not TESTING else TEST_API_KEY
 URL = MAIN_URL if not TESTING else TEST_URL
 
@@ -26,14 +27,17 @@ player = Player()
 print(f"Current cooldown: {player.cooldown}")
 
 print("Hunting for treasure!")
+print(f"New name: {player.name}")
 print(f"Current gold: {player.gold}")
+response = player.balance()
+print(f"Current balance: {response}")
 visited = set({})
-## Once we have a name, we no longer collect gold. While no name or not 1000 gold, we traverse the map for treasure
+# Once we have a name, we no longer collect gold. While no name or not 1000 gold, we traverse the map for treasure
 while player.gold < 1000 and "User" in player.name:
 
-    ## Go to random room
-    ## If there are items in the room, then we take those items up until we are encumbered.
-    ## When we hit max items, we should return to the shop from our current room.
+    # Go to random room
+    # If there are items in the room, then we take those items up until we are encumbered.
+    # When we hit max items, we should return to the shop from our current room.
     while player.encumbrance < player.strength - 1:
         visited.add(player.current_room)
 
@@ -54,14 +58,14 @@ while player.gold < 1000 and "User" in player.name:
             handle_items(player, item)
             print(f"Took {item}.\nCurrent items: {player.inventory}")
 
-    ## Go back to the shop and sell the item
+    # Go back to the shop and sell the item
     path = graph.bfs(player.current_room, 1)
     move_to_location(player, path)
     for item in player.inventory:
         if "treasure" in item:
             player.sell_treasure(item)
             print(player.gold)
-        
+
     # Try to use wise explorer instead of move endpoint
     # for m in traversal:
     # room = player.current_room
@@ -78,7 +82,7 @@ while player.gold < 1000 and "User" in player.name:
     # for item in player.inventory:
     #     sell_treasure(item, API_KEY)
 
-## While 1000 gold, make way to pirate ry.
+# While 1000 gold, make way to pirate ry.
 while player.gold >= 1000:
     path = graph.bfs(player.current_room, 467)
     move_to_location(player, path)
@@ -97,30 +101,44 @@ while player.gold >= 1000:
     name = NAME
     print(name)
     player.name_changer(name)
+    print(f"New name: {player.name} ")
     # cooldown = response["cooldown"]
     # time.sleep(cooldown)
 
-## Go to the shrine, and use pray function
-path = graph.bfs(player.current_room, 374)
+# Go to the shrine, and use pray function
+# path = graph.bfs(player.current_room, 374)
+# move_to_location(player, path)
+# print("PRAYING!")
+# player.pray()
+
+# path = graph.bfs(374, 461)
+# move_to_location(player, path)
+# player.pray()
+
+
+# Move from pirate ry to the well to solve puzzle with ls-8
+# print("Heading to the well!")
+# path = graph.bfs(player.current_room, 55)
+# move_to_location(player, path)
+# response = player.init_player()
+# print(response)
+# response = player.examine(treasure="Wishing Well")
+# print(response)
+# Solve the puzzle
+
+# Move from the well to the new location
+print("Heading to the mine!")
+path = graph.bfs(player.current_room, ROOM_NR)
 move_to_location(player, path)
-player.pray()
-
-path = graph.bfs(374, 461)
-move_to_location(player, path)
-player.pray()
+response = player.init_player()
+print(response)
 
 
-## Move from pirate ry to the well to solve puzzle with ls-8
-path = graph.bfs(461, 55)
-move_to_location(player, path)
-## Solve the puzzle
-
-## Move from the well to the new location
-## Mine at new location
+# Mine at new location
 header = {
-            "Authorization": f"Token {API_KEY}",
-            "Content-Type": "application/json",
-        }
+    "Authorization": f"Token {API_KEY}",
+    "Content-Type": "application/json",
+}
 response = dreamy.get(
     f"{URL}/api/bc/last_proof/", headers=header)
 last_bl = response["proof"]
@@ -129,4 +147,4 @@ data = {"proof": new_proof}
 response = dreamy.post(
     f"{URL}/api/bc/mine/", headers=header, data=data)
 
-
+print(response)
