@@ -206,7 +206,7 @@ class Player:
             headers=balance_header,
             cooldown=self.cooldown
         )
-        
+
         self.cooldown = response["cooldown"]
         time.sleep(self.cooldown)
         self.status_update()
@@ -273,7 +273,7 @@ class Player:
         time.sleep(self.cooldown)
         return response
 
-    def dash(self, direction, num_rooms, room_id):
+    def dash(self, direction, num_rooms, room_ids):
         header = {
             "Authorization": f"Token {API_KEY}",
             "Content-Type": "application/json",
@@ -283,7 +283,7 @@ class Player:
             f"{URL}/api/adv/dash/",
             headers=header,
             data={"direction": f"{direction}",
-                  "num_rooms": f"{num_rooms}", "next_room_ids": f"{room_id}"},
+                  "num_rooms": f"{num_rooms}", "next_room_ids": f"{room_ids}"},
             cooldown=self.cooldown
         )
 
