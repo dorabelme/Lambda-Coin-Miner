@@ -3,6 +3,7 @@ from dreamy import dreamy
 from mine import proof_of_work, valid_proof
 from graphutils import Queue
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 MAIN_API_KEY = os.getenv("MAIN_API_KEY")
@@ -46,7 +47,8 @@ def mine(player):
         response = dreamy.get(
         f"{URL}/api/bc/last_proof/", headers=header)
         last_bl = response["proof"]
-        new_proof = proof_of_work(last_bl)
+        difficulty = response["difficulty"]
+        new_proof = proof_of_work(last_bl, difficulty)
         data = {"proof": new_proof}
         response = dreamy.post(
         f"{URL}/api/bc/mine/", headers=header, data=data)
