@@ -113,7 +113,8 @@ class Graph:
             next_room = path.pop(0)
             reverse_keys = {value: key for key,
                             value in self.rooms[current_room]["exits"].items()}
-            traversal.append((reverse_keys[next_room], next_room))
+            traversal.append(
+                (reverse_keys[next_room], next_room, self.rooms[next_room]['elevation']))
             current_room = next_room
         return traversal
 

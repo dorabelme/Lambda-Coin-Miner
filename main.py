@@ -126,7 +126,7 @@ for i in range(0, 100):
     response = player.init_player()
     print(response)
     response = player.examine(treasure="Wishing Well")
-    print(response)
+    # print(response)
     ROOM_NR = ls8(response['description'])
     # Solve the puzzle
     # Write response to hint.ls8
@@ -140,9 +140,11 @@ for i in range(0, 100):
     print(response)
 
     # Mine at new location
-    mine(player)
-    while "New Block Forged" not in response["messages"][0]:
-        mine(player)
+    response = mine(player)
+    while "messages" not in response or not response["messages"] or "New Block Forged" not in response["messages"][0]:
+        # print(response)
+        response = mine(player)
+    print(response["messages"])
 
     path = graph.bfs(player.current_room, 55)
     move_to_location(player, path)
