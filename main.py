@@ -139,9 +139,6 @@ for i in range(0, 100):
 
     # Mine at new location
     response = mine(player)
-    while "messages" not in response or not response["messages"] or "New Block Forged" not in response["messages"][0]:
-        # print(response)
-        response = mine(player)
     print(response["messages"])
 
     path = graph.bfs(player.current_room, 55)
