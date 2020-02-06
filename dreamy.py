@@ -4,7 +4,7 @@ import time
 
 
 class Dreamy:
-    def get(self, URL=None, headers=None, cooldown=1):
+    def get(self, URL=None, headers=None, cooldown=15):
         if not URL:
             raise Exception("No URL supplied")
 
@@ -17,18 +17,18 @@ class Dreamy:
                 ).json()
                 if "errors" in response and response["errors"]:
                     print(f"Error: {response['errors']}")
-                    cooldown = response["cooldown"]
-                    time.sleep(cooldown)
-                else:
-                    successful = True
+                cooldown = response["cooldown"]
+                time.sleep(cooldown)
+                successful = True
             except ValueError:
                 print("Error:  Non-json response")
                 print("Response returned:")
                 print(response)
+                time.sleep(cooldown)
 
         return response
 
-    def post(self, URL=None, headers=None, data={}, cooldown=1):
+    def post(self, URL=None, headers=None, data={}, cooldown=15):
         if not URL:
             return {"errors": ["No URL supplied"]}
 
@@ -42,14 +42,14 @@ class Dreamy:
                 ).json()
                 if "errors" in response and response["errors"]:
                     print(f"Error: {response['errors']}")
-                    cooldown = response["cooldown"]
-                    time.sleep(cooldown)
-                else:
-                    successful = True
+                cooldown = response["cooldown"]
+                time.sleep(cooldown)
+                successful = True
             except ValueError:
                 print("Error:  Non-json response")
                 print("Response returned:")
                 print(response)
+                time.sleep(cooldown)
 
         return response
 
