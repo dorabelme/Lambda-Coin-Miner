@@ -114,7 +114,7 @@ def ls8(description):
     message = cpu.run()[-3:]
     return int(message)
 
-# maybe loop through once to start?
+
 for i in range(0, 100):
     print("Heading to the well!")
     path = graph.bfs(player.current_room, 55)
@@ -137,9 +137,7 @@ for i in range(0, 100):
 
 
     # Mine at new location
-    mine(player)
-    while "New Block Forged" not in response["messages"][0]:
-        mine(player)
+    response = mine(player)
 
     path = graph.bfs(player.current_room, 55)
     move_to_location(player, path)

@@ -34,6 +34,11 @@ def move_to_location(player, path):
         # player.movement(m[0])
         print(f"Moving {m[0]} to room {m[1]}")
         distance -= 1
+        if player.encumbrance < player.strength - 1 and player.room_items:
+            item = player.room_items[0]
+            print(f"Found {item}! Taking it...")
+            handle_items(player, item)
+            print(f"Took {item}.\nCurrent items: {player.inventory}")
         # cooldown = response["cooldown"]
         # time.sleep(cooldown)
         # if "errors" in response:
@@ -50,8 +55,10 @@ def mine(player):
         difficulty = response["difficulty"]
         new_proof = proof_of_work(last_bl, difficulty)
         data = {"proof": new_proof}
+        print(f"Submitting proof: {new_proof}")
         response = dreamy.post(
         f"{URL}/api/bc/mine/", headers=header, data=data)
 
         print(response)
         time.sleep(response["cooldown"])
+        return response
