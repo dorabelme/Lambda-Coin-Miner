@@ -34,6 +34,7 @@ print(f"New name: {player.name}")
 print(f"Current gold: {player.gold}")
 response = player.balance()
 print(f"Current balance: {response}")
+print(f"Player class: {player.abilities} ")
 visited = set({})
 # Once we have a name, we no longer collect gold. While no name or not 1000 gold, we traverse the map for treasure
 while player.gold < 1000 and "User" in player.name:
@@ -84,7 +85,7 @@ while player.gold >= 1000:
     # time.sleep(cooldown)
 
 # Go to the shrine, and use pray function
-# path = graph.bfs(player.current_room, 374)
+# path = graph.bfs(player.current_room, 22)
 # move_to_location(player, path)
 # print("PRAYING!")
 # player.pray()
@@ -105,6 +106,8 @@ while player.gold >= 1000:
 
 # solve multiple puzzle with ls-8 and mine coins
 # pattern = re.compile('/\d+(?=\D)/g')
+
+
 def ls8(description):
     code = description[41:].split('\n')
     # print(code)
@@ -113,6 +116,7 @@ def ls8(description):
     cpu.load(code)
     message = cpu.run()[-3:]
     return int(message)
+
 
 # maybe loop through once to start?
 for i in range(0, 100):
@@ -134,7 +138,6 @@ for i in range(0, 100):
     move_to_location(player, path)
     response = player.init_player()
     print(response)
-
 
     # Mine at new location
     mine(player)
