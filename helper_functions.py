@@ -24,6 +24,26 @@ def handle_items(player, item):
 
 
 def move_to_location(player, path):
+    count = 1
+    plan = [path[0]]
+    for i in range(1, len(path)):
+        prev_dir, prev_id, prev_elev = path[i - 1]
+        cur_dir, cur_id, cur_elev = path[i]
+
+        # If done collecting dash rooms
+        if cur_dir != prev_dir and len(plan) > 1:
+            # Then Dash
+            room_list = ','.join([str(room[1]) for room in plan])
+            print(
+                f"Dashing {plan[0][0]} from room {plan[0][1]} to room {plan[-1][1]}")
+            print(f"Rooms: {room_list}")
+            # Call dash
+            plan = []
+            count = 1
+        elif cur_dir == prev_dir:
+            plan.append(path[i])
+            count += 1
+
     distance = len(path)
     for m in path:
         print(f"{distance} steps away from your destination")

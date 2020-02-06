@@ -147,16 +147,3 @@ for i in range(0, 100):
 
     path = graph.bfs(player.current_room, 55)
     move_to_location(player, path)
-
-    # header = {
-    #     "Authorization": f"Token {API_KEY}",
-    #     "Content-Type": "application/json",
-    # }
-    # response = dreamy.get(
-    #     f"{URL}/api/bc/last_proof/", headers=header)
-    # last_bl = response["proof"]
-    # new_proof = proof_of_work(last_bl)
-    # data = {"proof": new_proof}
-    # response = dreamy.post(
-    #     f"{URL}/api/bc/mine/", headers=header, data=data)
-    # print(response)
