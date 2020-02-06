@@ -3,6 +3,9 @@ import requests
 import hashlib
 import random
 import os
+import re
+
+from cpu import CPU
 
 from mine import proof_of_work, valid_proof
 from helper_functions import handle_items, move_to_location, mine
@@ -86,14 +89,32 @@ while player.gold >= 1000:
 # print("PRAYING!")
 # player.pray()
 
-path = graph.bfs(player.current_room, 461)
-move_to_location(player, path)
-print("Praying for dash")
-player.pray()
-exit()
+# print("Mining")
+# path = graph.bfs(player.current_room, 195)
+# move_to_location(player, path)
+# response = player.init_player()
+# print(response)
+# mine(player)
+# print(response)
+# exit()
+# path = graph.bfs(player.current_room, 461)
+# move_to_location(player, path)
+# print("Praying for dash")
+# player.pray()
+# exit()
 
-# Move from pirate ry to the well to solve puzzle with ls-8
+# solve multiple puzzle with ls-8 and mine coins
+# pattern = re.compile('/\d+(?=\D)/g')
+def ls8(description):
+    code = description[41:].split('\n')
+    # print(code)
+    # exit()
+    cpu = CPU()
+    cpu.load(code)
+    message = cpu.run()[-3:]
+    return int(message)
 
+# maybe loop through once to start?
 for i in range(0, 100):
     print("Heading to the well!")
     path = graph.bfs(player.current_room, 55)
@@ -102,6 +123,7 @@ for i in range(0, 100):
     print(response)
     response = player.examine(treasure="Wishing Well")
     print(response)
+    ROOM_NR = ls8(response['description'])
     # Solve the puzzle
     # Write response to hint.ls8
     # Get back a number
@@ -116,10 +138,11 @@ for i in range(0, 100):
 
     # Mine at new location
     mine(player)
+    while "New Block Forged" not in response["messages"][0]:
+        mine(player)
 
-    if response["messages"] == "New Block Forged":
-        path = graph.bfs(player.current_room, 55)
-        move_to_location(player, path)
+    path = graph.bfs(player.current_room, 55)
+    move_to_location(player, path)
 
     # header = {
     #     "Authorization": f"Token {API_KEY}",

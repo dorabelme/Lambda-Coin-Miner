@@ -68,6 +68,8 @@ class CPU:
             0b01001000: self.pra
         }
 
+        self.message = ""
+
     # accepts the address in RAM and returns the value stored there
     def ram_read(self, address):
         return self.ram[address]
@@ -186,7 +188,8 @@ class CPU:
 
     def pra(self, operand_a, operand_b):
         operand_a = self.ram_read(self.pc + 1)
-        print(chr(self.reg[operand_a]))
+        # print(chr(self.reg[operand_a]), end="", flush=True)
+        self.message += chr(self.reg[operand_a])
 
         return (2, True)
 
@@ -235,21 +238,25 @@ class CPU:
         #     self.ram[address] = instruction
         #     address += 1
 
-        with open(program) as f:
-            for line in f:
-                comment_split = line.split('\n')
-                num = comment_split[0].strip()
+        for num in program:
+            self.ram_write(int(num, 2), address)
+            address += 1
 
-                if num == '':
-                    continue
+        # with open(program) as f:
+        #     for line in f:
+        #         comment_split = line.split('\n')
+        #         num = comment_split[0].strip()
 
-                try:
-                    # print(num)
-                    self.ram_write(int(num, 2), address)
-                    address += 1
-                except ValueError:
-                    # print("Value error")
-                    pass
+        #         if num == '':
+        #             continue
+
+        #         try:
+        #             # print(num)
+        #             self.ram_write(int(num, 2), address)
+        #             address += 1
+        #         except ValueError:
+        #             # print("Value error")
+        #             pass
 
         # print("Finished reading the program")
 
@@ -336,47 +343,5 @@ class CPU:
                 print(f"Error: Instruction {instruction_register} not found!")
                 # print(e)
                 sys.exit(1)
-        running = True
-
-        while running:
-            instruction_register = self.ram_read(self.pc)
-            # print(instruction_register)
-
-            operand_a = self.ram_read(self.pc + 1)
-            operand_b = self.ram_read(self.pc + 2)
-
-            # print(instruction_register, operand_a, operand_b)
-
-            try:
-                f = self.commands[instruction_register]
-                # print(f)
-                operation_op = f(operand_a, operand_b)
-                running = operation_op[1]
-                self.pc += operation_op[0]
-
-            except Exception as e:
-                print(f"Error: Instruction {instruction_register} not found!")
-                # print(e)
-                sys.exit(1)
-        running = True
-
-        while running:
-            instruction_register = self.ram_read(self.pc)
-            # print(instruction_register)
-
-            operand_a = self.ram_read(self.pc + 1)
-            operand_b = self.ram_read(self.pc + 2)
-
-            # print(instruction_register, operand_a, operand_b)
-
-            try:
-                f = self.commands[instruction_register]
-                # print(f)
-                operation_op = f(operand_a, operand_b)
-                running = operation_op[1]
-                self.pc += operation_op[0]
-
-            except Exception as e:
-                print(f"Error: Instruction {instruction_register} not found!")
-                # print(e)
-                sys.exit(1)
+        
+        return self.message

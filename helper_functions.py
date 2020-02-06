@@ -1,6 +1,18 @@
+import os
 from dreamy import dreamy
 from mine import proof_of_work, valid_proof
 from graphutils import Queue
+from dotenv import load_dotenv
+
+load_dotenv()
+MAIN_API_KEY = os.getenv("MAIN_API_KEY")
+TEST_API_KEY = os.getenv("TEST_API_KEY")
+MAIN_URL = os.getenv("MAIN_URL")
+TEST_URL = os.getenv("TEST_URL")
+
+TESTING = False
+API_KEY = MAIN_API_KEY if not TESTING else TEST_API_KEY
+URL = MAIN_URL if not TESTING else TEST_URL
 
 def handle_items(player, item):
     player.take_treasure(item)
@@ -38,4 +50,6 @@ def mine(player):
         data = {"proof": new_proof}
         response = dreamy.post(
         f"{URL}/api/bc/mine/", headers=header, data=data)
+
         print(response)
+        time.sleep(response["cooldown"])
