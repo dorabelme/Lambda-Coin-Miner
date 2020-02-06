@@ -35,7 +35,7 @@ def move_to_location(player, path):
         prev_dir, prev_id, prev_elev = path[i - 1]
         cur_dir, cur_id, cur_elev = path[i]
 
-        if cur_dir != prev_dir:
+        if cur_dir != prev_dir or cur_elev > prev_elev:
             if len(plan) > 1:
                 room_list = ','.join([str(room[1]) for room in plan])
                 print(
