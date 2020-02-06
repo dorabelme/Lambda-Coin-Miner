@@ -15,6 +15,7 @@ TESTING = False
 API_KEY = MAIN_API_KEY if not TESTING else TEST_API_KEY
 URL = MAIN_URL if not TESTING else TEST_URL
 
+
 def handle_items(player, item):
     player.take_treasure(item)
     # If boots or jacket have been picked up and are not already being worn, wear them
@@ -23,35 +24,48 @@ def handle_items(player, item):
 
 
 def move_to_location(player, path):
-    # queue = Queue()
-    # prev_dir = None
-    # for m in path:
-        
     distance = len(path)
     for m in path:
         print(f"{distance} steps away from your destination")
-        player.wise_explorer(m[0], m[1])
-        # player.movement(m[0])
         print(f"Moving {m[0]} to room {m[1]}")
+        response = player.wise_explorer(m[0], m[1])
+        # Check for fields in response and output values if present
+        for field in ["Description", "Terrain", "Elevation", "Players", "Items", "Cooldown"]:
+            if field.lower() in response:
+                val = response[field.lower()]
+                print(f"{field.upper()}: ", end="")
+                if not isinstance(val, list):
+                    print(val)
+                else:
+                    print(*val, sep=", ")
+        print()
         distance -= 1
+        if player.encumbrance < player.strength - 1 and player.room_items:
+            item = player.room_items[0]
+            print(f"Found {item}! Taking it...")
+            handle_items(player, item)
+            print(f"Took {item}.\nCurrent items: {player.inventory}")
         # cooldown = response["cooldown"]
         # time.sleep(cooldown)
         # if "errors" in response:
         #     print(response["errors"])
 
+
 def mine(player):
-        header = {
+    header = {
         "Authorization": f"Token {API_KEY}",
         "Content-Type": "application/json",
-        }
-        response = dreamy.get(
+    }
+    response = dreamy.get(
         f"{URL}/api/bc/last_proof/", headers=header)
-        last_bl = response["proof"]
-        difficulty = response["difficulty"]
-        new_proof = proof_of_work(last_bl, difficulty)
-        data = {"proof": new_proof}
-        response = dreamy.post(
+    last_bl = response["proof"]
+    difficulty = response["difficulty"]
+    new_proof = proof_of_work(last_bl, difficulty)
+    data = {"proof": new_proof}
+    print(f"Submitting proof: {new_proof}")
+    response = dreamy.post(
         f"{URL}/api/bc/mine/", headers=header, data=data)
 
-        print(response)
-        time.sleep(response["cooldown"])
+    # print(response)
+    time.sleep(response["cooldown"])
+    return response

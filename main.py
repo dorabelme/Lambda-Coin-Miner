@@ -105,6 +105,8 @@ while player.gold >= 1000:
 
 # solve multiple puzzle with ls-8 and mine coins
 # pattern = re.compile('/\d+(?=\D)/g')
+
+
 def ls8(description):
     code = description[41:].split('\n')
     # print(code)
@@ -114,6 +116,7 @@ def ls8(description):
     message = cpu.run()[-3:]
     return int(message)
 
+
 # maybe loop through once to start?
 for i in range(0, 100):
     print("Heading to the well!")
@@ -122,7 +125,7 @@ for i in range(0, 100):
     response = player.init_player()
     print(response)
     response = player.examine(treasure="Wishing Well")
-    print(response)
+    # print(response)
     ROOM_NR = ls8(response['description'])
     # Solve the puzzle
     # Write response to hint.ls8
@@ -135,11 +138,12 @@ for i in range(0, 100):
     response = player.init_player()
     print(response)
 
-
     # Mine at new location
-    mine(player)
-    while "New Block Forged" not in response["messages"][0]:
-        mine(player)
+    response = mine(player)
+    while "messages" not in response or not response["messages"] or "New Block Forged" not in response["messages"][0]:
+        # print(response)
+        response = mine(player)
+    print(response["messages"])
 
     path = graph.bfs(player.current_room, 55)
     move_to_location(player, path)
