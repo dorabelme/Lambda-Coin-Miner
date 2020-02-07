@@ -32,12 +32,25 @@ def move_to_location(player, path):
         return
 
     plan = [path[0]]
+    print(plan)
     for i in range(1, len(path)):
         # print(plan)
+
         prev_dir, prev_id, prev_elev = path[i - 1]
         cur_dir, cur_id, cur_elev = path[i]
+        # next_dir, next_id, next_elev = path[i+1]
+        print(f"CURRENT DIRECTION: {cur_dir}")
+        # print(f"NEXT DIRECTION: {next_dir}")
 
-        if cur_dir != prev_dir or cur_elev > prev_elev:
+        if cur_elev > prev_elev:
+            print("We are flying!")
+            if len(plan) > 1:
+                player.flight(cur_dir)
+            else:
+                player.wise_explorer(prev_dir, plan[0][1])
+                plan = [path[i]]
+
+        elif cur_dir != prev_dir or cur_elev > prev_elev:
             if len(plan) > 1:
                 room_list = ','.join([str(room[1]) for room in plan])
                 print(
