@@ -141,8 +141,8 @@ for i in range(0, 100):
     print("Heading to the mine!")
     path = graph.bfs(player.current_room, ROOM_NR)
     move_to_location(path)
-    response = player.init_player()
-    print(response)
+    # response = player.init_player()
+    # print(response)
 
     # Mine at new location
     response = mine(player)

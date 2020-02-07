@@ -135,6 +135,8 @@ def move_to_location(path):
 
 
 def mine(player):
+    print(
+        f"⛏️  MINING for a LambdaCoin...", end="", flush=True)
     header = {
         "Authorization": f"Token {API_KEY}",
         "Content-Type": "application/json",
@@ -145,9 +147,10 @@ def mine(player):
     difficulty = response["difficulty"]
     new_proof = proof_of_work(last_bl, difficulty)
     data = {"proof": new_proof}
-    print(f"Submitting proof: {new_proof}")
     response = dreamy.post(
         f"{URL}/api/bc/mine/", headers=header, data=data)
+
+    status_message(response)
 
     # print(response)
     time.sleep(response["cooldown"])
