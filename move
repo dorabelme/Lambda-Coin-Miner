@@ -53,7 +53,7 @@ def pluralize(word, items):
 def move_to_location(destination):
     path = graph.bfs(player.current_room, destination)
     if not path:
-        print(f"Room {player.current_room}? You're already there!")
+        print(f"🤔  Room {player.current_room}? You're already there!")
         return
 
     optimized_path = [(k, list(g))
@@ -70,8 +70,12 @@ def move_to_location(destination):
     nice_directions = {'n': 'North', 's': 'South', 'e': 'East', 'w': 'West'}
     if TESTING:
         print(path, optimized_path)
+
+    count = 1
     for (direction, elevation), rooms in optimized_path:
         destination = rooms[-1][1]
+
+        print(f"{str(count).zfill(2)} ", end="", flush=True)
 
         if direction == "warp":
             print(

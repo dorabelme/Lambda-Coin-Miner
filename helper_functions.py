@@ -49,7 +49,7 @@ def pluralize(word, items):
 
 def move_to_location(path):
     if not path:
-        print(f"Room {player.current_room}? You're already there!")
+        print(f"🤔  Room {player.current_room}? You're already there!")
         return
 
     optimized_path = [(k, list(g))
@@ -71,7 +71,8 @@ def move_to_location(path):
     for (direction, elevation), rooms in optimized_path:
         destination = rooms[-1][1]
 
-        print(f"{count.zfill(2)} ", end="", flush=True)
+        print(f"{str(count).zfill(2)} ", end="", flush=True)
+
         if direction == "warp":
             print(
                 f"✨  WARPING from room {cur_room} to {destination}...", end="", flush=True)
@@ -106,6 +107,7 @@ def move_to_location(path):
             status_message(response)
 
         prev_elev, cur_room = elevation, destination
+        count += 1
 
         if player.encumbrance < player.strength - 1 and player.room_items:
             item = player.room_items[0]

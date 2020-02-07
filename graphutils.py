@@ -50,13 +50,12 @@ class Graph:
         try:
             with open(filename) as json_file:
                 data = json.load(json_file)
-                print(len(data))
                 for room in data:
                     self.add_room(data[room], from_file=True)
         except IOError as e:
             print(e)
-        finally:
-            print("Graph loaded successfully!")
+        # finally:
+        #     # print("Graph loaded successfully!")
 
     def add_room(self, room, from_file=False):
         """
