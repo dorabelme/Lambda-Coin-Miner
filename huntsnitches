@@ -117,7 +117,7 @@ def move_to_location(player, destination):
             for item in player.room_items:
                 if "snitch" in item:
                     print(f"💰  FOUND {item}! Taking it...", end="", flush=True)
-                    response = handle_items(item)
+                    response = handle_items(player, item)
                     status_message(response)
                     if "errors" in response and not response["errors"]:
                         print(f"😄  TOOK {item} ✅")
