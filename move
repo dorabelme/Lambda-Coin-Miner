@@ -51,16 +51,15 @@ def pluralize(word, items):
 
 
 def move_to_location(destination):
-    print(player.current_room, destination)
     path = graph.bfs(player.current_room, destination)
+    if not path:
+        print(f"Room {player.current_room}? You're already there!")
+        return
+
     optimized_path = [(k, list(g))
                       for k, g in groupby(path, operator.itemgetter(0, 2))]
 
     distance = len(path)
-    if distance == 0:
-        print("Room {player.current_room}? You're already there!")
-        return
-
     moves = len(optimized_path)
     print(
         f"\n🎫  ITINERARY: {distance} {pluralize('room', distance)} in {moves} {pluralize('move', moves)}")
