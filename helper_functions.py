@@ -41,6 +41,10 @@ def move_to_location(player, path):
         # next_dir, next_id, next_elev = path[i+1]
         print(f"CURRENT DIRECTION: {cur_dir}")
 
+        # if prev_dir == "warp":
+        #     print(f"Warping to room {prev_id}")
+        #     player.warp()
+        #     plan = [path[i]]
         if prev_dir == "warp":
             print(f"Warping to room {prev_id}")
             player.warp()
@@ -72,6 +76,8 @@ def move_to_location(player, path):
         else:
             plan.append(path[i])
         prev_dir, prev_id, prev_elev = cur_dir, cur_id, cur_elev
+        if prev_dir == "warp":
+            prev_dir == None
 
     distance = len(plan)
     for m in plan:
