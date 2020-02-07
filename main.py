@@ -147,7 +147,7 @@ for i in range(0, 100):
 
     # Mine at new location
     response = mine(player)
-    print(response["messages"])
+    # print(response["messages"])
 
     path = graph.bfs(player.current_room, 55)
     move_to_location(player, path)
