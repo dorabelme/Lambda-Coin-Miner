@@ -113,20 +113,18 @@ def move_to_location(player, destination):
         prev_elev, cur_room = elevation, destination
         count += 1
 
-        if player.encumbrance < player.strength - 1 and player.room_items:
-            for item in player.room_items:
-                if "snitch" in item:
-                    print(f"💰  FOUND {item}! Taking it...", end="", flush=True)
-                    response = handle_items(player, item)
-                    status_message(response)
-                    if "errors" in response and not response["errors"]:
-                        print(f"😄  TOOK {item} ✅")
-                        print(f"🎒  INVENTORY: {', '.join(player.inventory)}")
+        for item in player.room_items:
+            if "snitch" in item:
+                print(f"💰  FOUND {item}! Taking it...", end="", flush=True)
+                response = handle_items(player, item)
+                status_message(response)
+                if "errors" in response and not response["errors"]:
+                    print(f"😄  TOOK {item} ✅")
 
-                    cooldown = response["cooldown"]
-                    time.sleep(cooldown)
-                    if "errors" in response and response["errors"]:
-                        print(response["errors"])
+                cooldown = response["cooldown"]
+                time.sleep(cooldown)
+                if "errors" in response and response["errors"]:
+                    print(response["errors"])
 
     print()
     for field in ["Description", "Terrain", "Elevation", "Players", "Items", "Cooldown"]:
