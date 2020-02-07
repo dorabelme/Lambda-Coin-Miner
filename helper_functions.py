@@ -28,6 +28,8 @@ def move_to_location(player, path):
     print(path)
     distance = len(path)
     print(f"{distance} steps away from your destination")
+    if distance == 0:
+        return
 
     plan = [path[0]]
     for i in range(1, len(path)):

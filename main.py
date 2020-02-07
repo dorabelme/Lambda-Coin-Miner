@@ -34,6 +34,8 @@ print(f"New name: {player.name}")
 print(f"Current gold: {player.gold}")
 response = player.balance()
 print(f"Current balance: {response}")
+print(f"Player class: {player.abilities} ")
+print(f"Player inventory: {player.inventory} ")
 visited = set({})
 # Once we have a name, we no longer collect gold. While no name or not 1000 gold, we traverse the map for treasure
 while player.gold < 1000 and "User" in player.name:
@@ -82,8 +84,14 @@ while player.gold < 1000 and "User" in player.name:
     # cooldown = response["cooldown"]
     # time.sleep(cooldown)
 
+# Go to the Transmogrify
+# path = graph.bfs(player.current_room, 495)
+# move_to_location(player, path)
+# print("Transmogrify!")
+# exit()
+
 # Go to the shrine, and use pray function
-# path = graph.bfs(player.current_room, 374)
+# path = graph.bfs(player.current_room, 22)
 # move_to_location(player, path)
 # print("PRAYING!")
 # player.pray()
@@ -139,7 +147,7 @@ for i in range(0, 100):
 
     # Mine at new location
     response = mine(player)
-    print(response["messages"])
+    # print(response["messages"])
 
     path = graph.bfs(player.current_room, 55)
     move_to_location(player, path)
