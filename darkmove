@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from itertools import groupby
 import operator
 import time
+import random
 
 load_dotenv()
 MAIN_API_KEY = os.getenv("MAIN_API_KEY")
@@ -150,8 +151,6 @@ def move_to_location(player, destination):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        player = Player()
-        move_to_location(player, int(sys.argv[1]))
-    else:
-        print(f"Usage: {sys.argv[0]} <destination room id>")
+    player = Player()
+    while player.encumbrance < player.strength -1:
+        move_to_location(player, random.randint(500, 999))
