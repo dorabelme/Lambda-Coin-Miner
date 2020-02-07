@@ -1,9 +1,14 @@
+#!/usr/bin/env python
+
 import os
+import sys
 from dreamy import dreamy
 from mine import proof_of_work, valid_proof
-from graphutils import Queue, graph
+from graphutils import graph, Queue
 from dotenv import load_dotenv
 from player import Player
+from itertools import groupby
+import operator
 import time
 
 load_dotenv()
@@ -134,21 +139,8 @@ def move_to_location(destination):
                     print(values)
 
 
-def mine(player):
-    header = {
-        "Authorization": f"Token {API_KEY}",
-        "Content-Type": "application/json",
-    }
-    response = dreamy.get(
-        f"{URL}/api/bc/last_proof/", headers=header)
-    last_bl = response["proof"]
-    difficulty = response["difficulty"]
-    new_proof = proof_of_work(last_bl, difficulty)
-    data = {"proof": new_proof}
-    print(f"Submitting proof: {new_proof}")
-    response = dreamy.post(
-        f"{URL}/api/bc/mine/", headers=header, data=data)
-
-    # print(response)
-    time.sleep(response["cooldown"])
-    return response
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        move_to_location(int(sys.argv[1]))
+    else:
+        print(f"Usage: {sys.argv[0]} <destination room id>")

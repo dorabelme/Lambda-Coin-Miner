@@ -20,7 +20,6 @@ TEST_API_KEY = os.getenv("TEST_API_KEY")
 MAIN_URL = os.getenv("MAIN_URL")
 TEST_URL = os.getenv("TEST_URL")
 NAME = os.getenv("NAME")
-ROOM_NR = os.getenv("ROOM_NR")
 
 TESTING = False
 API_KEY = MAIN_API_KEY if not TESTING else TEST_API_KEY
@@ -126,14 +125,14 @@ for i in range(0, 100):
     print(response)
     response = player.examine(treasure="Wishing Well")
     # print(response)
-    ROOM_NR = ls8(response['description'])
+    room_num = ls8(response['description'])
     # Solve the puzzle
     # Write response to hint.ls8
     # Get back a number
 
     # Move from the well to the new location
     print("Heading to the mine!")
-    path = graph.bfs(player.current_room, ROOM_NR)
+    path = graph.bfs(player.current_room, room_num)
     move_to_location(player, path)
     response = player.init_player()
     print(response)
@@ -144,7 +143,7 @@ for i in range(0, 100):
     #     # print(response)
     #     response = mine(player)
     # print(response["messages"])
-    response = player.examine(treasure=f"{ROOM_NR}")
+    response = player.examine(treasure=f"{room_num}")
     print(response)
     if "golden snitch" in response["items"]:
         player.take_treasure("golden snitch")

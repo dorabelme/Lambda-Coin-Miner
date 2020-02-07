@@ -83,17 +83,19 @@ class Graph:
 
         return None
 
-    def connect_rooms(self, room1_id, room2_id, direction):
+    def connect_rooms(self, room1_id, room2_id, direction, recall=False):
         """
         Add a directed edge to the graph.
         """
-        reverse_dir = {'n': 's', 'e': 'w', 's': 'n', 'w': 'e', 'warp': 'warp'}[direction]
+        reverse_dir = {'n': 's', 'e': 'w', 's': 'n',
+                       'w': 'e', 'warp': 'warp', 'recall': 'recall'}[direction]
 
         if room1_id in self.rooms and room2_id in self.rooms:
             self.rooms[room1_id]["exits"][direction] = room2_id
-            self.rooms[room2_id]["exits"][reverse_dir] = room1_id
             self.vertices[room1_id].add(room2_id)
-            self.vertices[room2_id].add(room1_id)
+            if not recall:
+                self.rooms[room2_id]["exits"][reverse_dir] = room1_id
+                self.vertices[room2_id].add(room1_id)
         else:
             raise IndexError("That room does not exist.")
 
@@ -243,6 +245,9 @@ graph.load_graph('mergedmaps.json')
 # And connect edges between them
 for i in range(0, 500):
     graph.connect_rooms(i, i+500, 'warp')
+
+for i in range(1, 1000):
+    graph.connect_rooms(i, 0, "recall", recall=True)
 
 # # print(json.dumps(graph.rooms))
 
