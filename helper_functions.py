@@ -66,9 +66,12 @@ def move_to_location(path):
     nice_directions = {'n': 'North', 's': 'South', 'e': 'East', 'w': 'West'}
     if TESTING:
         print(path, optimized_path)
+
+    count = 1
     for (direction, elevation), rooms in optimized_path:
         destination = rooms[-1][1]
 
+        print(f"{count.zfill(2)} ", end="", flush=True)
         if direction == "warp":
             print(
                 f"✨  WARPING from room {cur_room} to {destination}...", end="", flush=True)
@@ -136,7 +139,7 @@ def move_to_location(path):
 
 def mine(player):
     print(
-        f"⛏️  MINING for a LambdaCoin...", end="", flush=True)
+        f"\n⛏️  MINING for a LambdaCoin...", end="", flush=True)
     header = {
         "Authorization": f"Token {API_KEY}",
         "Content-Type": "application/json",
