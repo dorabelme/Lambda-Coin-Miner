@@ -153,5 +153,6 @@ for i in range(0, 100):
     answer = player.balance()
     print(f"Current balance: {answer}")
 
+    player.init_player()
     path = graph.bfs(player.current_room, 55)
     move_to_location(path)

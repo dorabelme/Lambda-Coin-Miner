@@ -123,6 +123,8 @@ def move_to_location(path):
             if "errors" in response and response["errors"]:
                 print(response["errors"])
 
+        player.current_room = cur_room
+
     print()
     for field in ["Description", "Terrain", "Elevation", "Players", "Items", "Cooldown"]:
         if field.lower() in response:
