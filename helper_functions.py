@@ -118,10 +118,10 @@ def move_to_location(path):
                 print(f"😄  TOOK {item}")
                 print(f"🎒  INVENTORY: {', '.join(player.inventory)}")
 
-        cooldown = response["cooldown"]
-        time.sleep(cooldown)
-        if "errors" in response and response["errors"]:
-            print(response["errors"])
+            cooldown = response["cooldown"]
+            time.sleep(cooldown)
+            if "errors" in response and response["errors"]:
+                print(response["errors"])
 
     print()
     for field in ["Description", "Terrain", "Elevation", "Players", "Items", "Cooldown"]:
