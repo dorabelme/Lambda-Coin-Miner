@@ -60,12 +60,12 @@ while player.gold < 1000 and "User" in player.name:
 
     #     for item in player.room_items:
     #         print(f"Found {item}! Taking it...")
-    #         handle_items(item)
+    #         handle_items(player, item)
     #         print(f"Took {item}.\nCurrent items: {player.inventory}")
 
     # # Go back to the shop and sell the item
     # path = graph.bfs(player.current_room, 1)
-    # move_to_location(path)
+    # move_to_location(player, path)
     # for item in player.inventory:
     #     if "treasure" in item:
     #         player.sell_treasure(item)
@@ -74,7 +74,7 @@ while player.gold < 1000 and "User" in player.name:
     # While 1000 gold, make way to pirate ry.
     while player.gold >= 10000:
         path = graph.bfs(player.current_room, 467)
-        move_to_location(path)
+        move_to_location(player, path)
 
     # At pirate ry, change name.
     name = NAME
@@ -86,26 +86,26 @@ while player.gold < 1000 and "User" in player.name:
 
 # Go to the Transmogrify
 # path = graph.bfs(player.current_room, 495)
-# move_to_location(path)
+# move_to_location(player, path)
 # print("Transmogrify!")
 # exit()
 
 # Go to the shrine, and use pray function
 # path = graph.bfs(player.current_room, 22)
-# move_to_location(path)
+# move_to_location(player, path)
 # print("PRAYING!")
 # player.pray()
 
 # print("Mining")
 # path = graph.bfs(player.current_room, 195)
-# move_to_location(path)
+# move_to_location(player, path)
 # response = player.init_player()
 # print(response)
 # mine(player)
 # print(response)
 # exit()
 # path = graph.bfs(player.current_room, 461)
-# move_to_location(path)
+# move_to_location(player, path)
 # print("Praying for dash")
 # player.pray()
 # exit()
@@ -128,21 +128,20 @@ def ls8(description):
 for i in range(0, 100):
     print("Heading to the well!")
     path = graph.bfs(player.current_room, 55)
-    move_to_location(path)
-    response = player.init_player()
-    print(response)
+    move_to_location(player, path)
     response = player.examine(treasure="Wishing Well")
-    print(response)
+    if TESTING:
+        print(response)
+    print("Peering into the well...")
     ROOM_NR = ls8(response['description'])
+    print("Decoded the location!")
     # Solve the puzzle
     # Get back a number
 
     # Move from the well to the new location
     print("Heading to the mine!")
     path = graph.bfs(player.current_room, ROOM_NR)
-    move_to_location(path)
-    # response = player.init_player()
-    # print(response)
+    move_to_location(player, path)
 
     # Mine at new location
     response = mine(player)
@@ -155,4 +154,4 @@ for i in range(0, 100):
 
     player.init_player()
     path = graph.bfs(player.current_room, 55)
-    move_to_location(path)
+    move_to_location(player, path)
