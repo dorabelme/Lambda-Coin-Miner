@@ -6,7 +6,6 @@ from dreamy import dreamy
 from mine import proof_of_work, valid_proof
 from graphutils import graph, Queue
 from dotenv import load_dotenv
-from player import Player
 from itertools import groupby
 import operator
 import time
@@ -21,10 +20,8 @@ TESTING = False
 API_KEY = MAIN_API_KEY if not TESTING else TEST_API_KEY
 URL = MAIN_URL if not TESTING else TEST_URL
 
-player = Player()
 
-
-def handle_items(item):
+def handle_items(player, item):
     response = player.take_treasure(item)
     # If boots or jacket have been picked up and are not already being worn, wear them
     if ("boots" in item and not player.footwear) or ("jacket" in item and not player.bodywear):
@@ -50,7 +47,7 @@ def pluralize(word, items):
         return word
 
 
-def move_to_location(destination):
+def move_to_location(player, destination):
     path = graph.bfs(player.current_room, destination)
     if not path:
         print(f"🤔  Room {player.current_room}? You're already there!")
@@ -140,6 +137,8 @@ def move_to_location(destination):
                     else:
                         values = ", ".join(val)
                     print(values)
+
+    player.current_room = cur_room
 
 
 if __name__ == '__main__':
