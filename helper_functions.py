@@ -40,16 +40,19 @@ def move_to_location(player, path):
         cur_dir, cur_id, cur_elev = path[i]
         # next_dir, next_id, next_elev = path[i+1]
         print(f"CURRENT DIRECTION: {cur_dir}")
-        # print(f"NEXT DIRECTION: {next_dir}")
 
-        if cur_elev > prev_elev:
+        if prev_dir == "warp":
+            print(f"Warping to room {prev_id}")
+            player.warp()
+            plan = [path[i]]
+        elif cur_elev > prev_elev: # Change from prev_elev to greater than 0 for flying?
             print("We are flying!")
             if len(plan) > 1:
                 player.flight(cur_dir)
+                plan = [path[i]]
             else:
                 player.wise_explorer(prev_dir, plan[0][1])
                 plan = [path[i]]
-
         elif cur_dir != prev_dir or cur_elev > prev_elev:
             if len(plan) > 1:
                 room_list = ','.join([str(room[1]) for room in plan])
@@ -72,8 +75,12 @@ def move_to_location(player, path):
 
     distance = len(plan)
     for m in plan:
-        print(f"Moving {m[0]} to room {m[1]}")
-        response = player.wise_explorer(m[0], m[1])
+        if m[0] == "warp":
+            print(f"Warping to room {m[1]}")
+            player.warp()
+        else:
+            print(f"Moving {m[0]} to room {m[1]}")
+            response = player.wise_explorer(m[0], m[1])
         # Check for fields in response and output values if present
         for field in ["Description", "Terrain", "Elevation", "Players", "Items", "Cooldown"]:
             if field.lower() in response:
