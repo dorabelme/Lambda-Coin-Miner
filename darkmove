@@ -5,11 +5,13 @@ import sys
 from dreamy import dreamy
 from mine import proof_of_work, valid_proof
 from graphutils import graph, Queue
+from player import Player
 from dotenv import load_dotenv
 from itertools import groupby
-from player import Player
 import operator
 import time
+import random
+from cpu import CPU
 
 load_dotenv()
 MAIN_API_KEY = os.getenv("MAIN_API_KEY")
@@ -109,21 +111,21 @@ def move_to_location(player, destination):
             status_message(response)
 
         prev_elev, cur_room = elevation, destination
-        count += 1
 
         if player.encumbrance < player.strength - 1 and player.room_items:
-            item = player.room_items[0]
-            print(f"💰  FOUND {item}! Taking it...", end="", flush=True)
-            response = handle_items(item)
-            status_message(response)
-            if "errors" in response and not response["errors"]:
-                print(f"😄  TOOK {item} ✅")
-                print(f"🎒  INVENTORY: {', '.join(player.inventory)}")
+            for item in player.room_items:
+                if "snitch" in item:
+                    print(f"💰  FOUND {item}! Taking it...", end="", flush=True)
+                    response = handle_items(item)
+                    status_message(response)
+                    if "errors" in response and not response["errors"]:
+                        print(f"😄  TOOK {item} ✅")
+                        print(f"🎒  INVENTORY: {', '.join(player.inventory)}")
 
-            cooldown = response["cooldown"]
-            time.sleep(cooldown)
-            if "errors" in response and response["errors"]:
-                print(response["errors"])
+                    cooldown = response["cooldown"]
+                    time.sleep(cooldown)
+                    if "errors" in response and response["errors"]:
+                        print(response["errors"])
 
     print()
     for field in ["Description", "Terrain", "Elevation", "Players", "Items", "Cooldown"]:
@@ -142,10 +144,28 @@ def move_to_location(player, destination):
 
     player.current_room = cur_room
 
+def ls8(description):
+    code = description[41:].split('\n')
+    cpu = CPU()
+    cpu.load(code)
+    message = cpu.run()[-3:]
+    return int(message)
+
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        player = Player()
-        move_to_location(player, int(sys.argv[1]))
-    else:
-        print(f"Usage: {sys.argv[0]} <destination room id>")
+    player = Player()
+    while player.encumbrance < player.strength - 1:
+        print("Heading to the well!")
+        path = graph.bfs(player.current_room, 555)
+        move_to_location(player, path)
+        response = player.examine(treasure="Wishing Well")
+        if TESTING:
+            print(response)
+        print("Peering into the well...")
+        ROOM_NR = ls8(response['description'])
+        print("Decoded the location!")
+
+        # Move from the well to the new location
+        print("Heading to the snitch!")
+        path = graph.bfs(player.current_room, ROOM_NR)
+        move_to_location(player, path)
