@@ -1,7 +1,7 @@
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-from util import Graph
+from gonna_work import Graph
 import requests
 import time
 import json
@@ -17,7 +17,7 @@ found_items = set()
 wearing_boots = False
 wearing_jacket = False
 
-api_key = os.environ.get("API_KEY")
+api_key = os.environ.get("MAIN_API_KEY")
 # base_url = "https://treasure-hunt-test.herokuapp.com/api/adv"
 base_url = "https://lambda-treasure-hunt.herokuapp.com/api/adv"
 headers = {"Authorization": f"Token {api_key}"}
@@ -95,6 +95,8 @@ while len(visited_rooms) != 500:
     exits = graph.get_connected_rooms(
         player_current_room["room_id"], visited=False)
 
+    print("Exits", exits)
+
     # If there are exits
     if exits:
         # Store current room for connecting to the next room
@@ -112,10 +114,12 @@ while len(visited_rooms) != 500:
                 direction = random.choice(exits)
             else:
                 direction = exits[0]
+            print(f"Not backtracked. Direction: {direction}")
         else:
             # If we backtracked from a dead end, take next avail clockwise turn
             direction = exits[0]
             backtracked = False
+            print(f"Backtracked. Turning {direction}")
 
         print(f"Direction: {direction}")
         try:
@@ -143,7 +147,9 @@ while len(visited_rooms) != 500:
         time.sleep(player_current_room["cooldown"])
 
     else:
+        print("Backtracking...")
         route = graph.explore_bfs(player_current_room["room_id"])
+
         for direction in route:
             print(f"Direction: {direction}")
             try:
