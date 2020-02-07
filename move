@@ -115,7 +115,7 @@ def move_to_location(destination):
             response = handle_items(item)
             status_message(response)
             if "errors" in response and not response["errors"]:
-                print(f"😄  TOOK {item}")
+                print(f"😄  TOOK {item} ✅")
                 print(f"🎒  INVENTORY: {', '.join(player.inventory)}")
 
         cooldown = response["cooldown"]
