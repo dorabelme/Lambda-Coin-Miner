@@ -55,8 +55,8 @@ class Graph:
                     self.add_room(data[room], from_file=True)
         except IOError as e:
             print(e)
-        finally:
-            print("Graph loaded successfully!")
+        # finally:
+        #     print("Graph loaded successfully!")
 
     def add_room(self, room, from_file=False):
         """

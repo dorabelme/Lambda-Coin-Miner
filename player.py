@@ -47,7 +47,7 @@ class Player:
         return response
 
     def status_update(self):
-        print(f"Status update. Cooldown: {self.cooldown}")
+        # print(f"Status update. Cooldown: {self.cooldown}")
         time.sleep(self.cooldown)
         status_header = {
             "Authorization": f"Token {API_KEY}",
@@ -82,7 +82,7 @@ class Player:
         self.messages = response["messages"]
 
         time.sleep(self.cooldown)
-        print(self.cooldown)
+        # print(self.cooldown)
         return response
 
     def movement(self, direction):
@@ -224,6 +224,7 @@ class Player:
             data={"name": f"{name}", "confirm": "aye"},
             cooldown=self.cooldown
         )
+
         print(response)
 
         time.sleep(self.cooldown)
@@ -243,6 +244,7 @@ class Player:
         )
 
         print(response)
+
         self.cooldown = response["cooldown"]
         time.sleep(self.cooldown)
         self.status_update()
@@ -261,7 +263,7 @@ class Player:
             cooldown=self.cooldown
         )
 
-        print(response)
+        # print(response)
 
         self.current_room = response["room_id"]
         self.room_items = response["items"]
@@ -340,6 +342,29 @@ class Player:
 
         response = dreamy.post(
             f"{URL}/api/adv/warp/",
+            headers=header,
+            cooldown=self.cooldown
+        )
+
+        self.current_room = response["room_id"]
+        self.room_items = response["items"]
+        self.room_exits = response["exits"]
+        self.errors = response["errors"]
+        self.messages = response["messages"]
+        # self.cooldown = response["cooldown"]
+
+        self.cooldown = response["cooldown"]
+        time.sleep(self.cooldown)
+        return response
+
+    def recall(self):
+        header = {
+            "Authorization": f"Token {API_KEY}",
+            "Content-Type": "application/json",
+        }
+
+        response = dreamy.post(
+            f"{URL}/api/adv/recall/",
             headers=header,
             cooldown=self.cooldown
         )

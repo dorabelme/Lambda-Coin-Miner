@@ -15,8 +15,6 @@ class Dreamy:
                     URL,
                     headers=headers
                 ).json()
-                if "errors" in response and response["errors"]:
-                    print(f"Error: {response['errors']}")
                 cooldown = response["cooldown"]
                 time.sleep(cooldown)
                 successful = True
@@ -40,8 +38,6 @@ class Dreamy:
                     headers=headers,
                     data=json.dumps(data),
                 ).json()
-                if "errors" in response and response["errors"]:
-                    print(f"Error: {response['errors']}")
                 cooldown = response["cooldown"]
                 time.sleep(cooldown)
                 successful = True
