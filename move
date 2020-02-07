@@ -141,6 +141,8 @@ def move_to_location(destination):
                         values = ", ".join(val)
                     print(values)
 
+    player.current_room = cur_room
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

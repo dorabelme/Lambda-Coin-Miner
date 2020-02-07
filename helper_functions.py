@@ -138,6 +138,8 @@ def move_to_location(path):
                         values = ", ".join(val)
                     print(values)
 
+    player.current_room = cur_room
+
 
 def mine(player):
     print(
