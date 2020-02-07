@@ -98,7 +98,7 @@ def move_to_location(destination):
             print(
                 f"🧚  FLYING {nice_directions[direction]} from room {cur_room} to {destination}...", end="", flush=True)
             response = player.flight(direction)
-            print(f"{status_message(response)} Thank you for flying DreamAir!")
+            print(f"{status_message(response)}  Thank you for flying DreamAir!")
 
         else:
             print(
