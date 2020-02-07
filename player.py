@@ -341,7 +341,6 @@ class Player:
         response = dreamy.post(
             f"{URL}/api/adv/warp/",
             headers=header,
-            data={"name": f"{treasure}"},
             cooldown=self.cooldown
         )
 

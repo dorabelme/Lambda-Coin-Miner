@@ -72,7 +72,7 @@ while player.gold < 1000 and "User" in player.name:
     #         print(player.gold)
 
     # While 1000 gold, make way to pirate ry.
-    while player.gold >= 1000:
+    while player.gold >= 10000:
         path = graph.bfs(player.current_room, 467)
         move_to_location(player, path)
 
@@ -135,7 +135,6 @@ for i in range(0, 100):
     print(response)
     ROOM_NR = ls8(response['description'])
     # Solve the puzzle
-    # Write response to hint.ls8
     # Get back a number
 
     # Move from the well to the new location
@@ -147,20 +146,11 @@ for i in range(0, 100):
 
     # Mine at new location
     response = mine(player)
-    # print(response["messages"])
+    # Need while loop for proof checking
+    while "messages" not in response or not response["messages"] or "New Block Forged" not in response["messages"][0]:
+        response = mine(player)
+    answer = player.balance()
+    print(f"Current balance: {answer}")
 
     path = graph.bfs(player.current_room, 55)
     move_to_location(player, path)
-
-    # header = {
-    #     "Authorization": f"Token {API_KEY}",
-    #     "Content-Type": "application/json",
-    # }
-    # response = dreamy.get(
-    #     f"{URL}/api/bc/last_proof/", headers=header)
-    # last_bl = response["proof"]
-    # new_proof = proof_of_work(last_bl)
-    # data = {"proof": new_proof}
-    # response = dreamy.post(
-    #     f"{URL}/api/bc/mine/", headers=header, data=data)
-    # print(response)
