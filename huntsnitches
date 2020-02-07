@@ -111,6 +111,7 @@ def move_to_location(player, destination):
             status_message(response)
 
         prev_elev, cur_room = elevation, destination
+        count += 1
 
         if player.encumbrance < player.strength - 1 and player.room_items:
             for item in player.room_items:
@@ -144,6 +145,7 @@ def move_to_location(player, destination):
 
     player.current_room = cur_room
 
+
 def ls8(description):
     code = description[41:].split('\n')
     cpu = CPU()
@@ -156,8 +158,7 @@ if __name__ == '__main__':
     player = Player()
     while player.encumbrance < player.strength - 1:
         print("Heading to the well!")
-        path = graph.bfs(player.current_room, 555)
-        move_to_location(player, path)
+        move_to_location(player, 555)
         response = player.examine(treasure="Wishing Well")
         if TESTING:
             print(response)
@@ -167,5 +168,4 @@ if __name__ == '__main__':
 
         # Move from the well to the new location
         print("Heading to the snitch!")
-        path = graph.bfs(player.current_room, ROOM_NR)
-        move_to_location(player, path)
+        move_to_location(player, ROOM_NR)
