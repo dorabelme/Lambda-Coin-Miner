@@ -4,9 +4,9 @@ import os
 import sys
 from dreamy import dreamy
 from mine import proof_of_work, valid_proof
-from darkworld import graph, Queue
-from player import Player
+from graphutils import graph, Queue
 from dotenv import load_dotenv
+from player import Player
 from itertools import groupby
 import operator
 import time
@@ -49,12 +49,6 @@ def pluralize(word, items):
 
 
 def move_to_location(player, destination):
-    if player.current_room < 500:
-        print(
-            f"✨  WARPING to the Dark World...", end="", flush=True)
-        response = player.warp()
-        status_message(response)
-
     path = graph.bfs(player.current_room, destination)
     if not path:
         print(f"🤔  Room {player.current_room}? You're already there!")
@@ -117,19 +111,19 @@ def move_to_location(player, destination):
         prev_elev, cur_room = elevation, destination
 
         if player.encumbrance < player.strength - 1 and player.room_items:
-            for item in player.room_items:
-                if "snitch" in item:
-                    print(f"💰  FOUND {item}! Taking it...", end="", flush=True)
-                    response = handle_items(item)
-                    status_message(response)
-                    if "errors" in response and not response["errors"]:
-                        print(f"😄  TOOK {item} ✅")
-                        print(f"🎒  INVENTORY: {', '.join(player.inventory)}")
+            item = player.room_items[0]
+            if "egg" in item:
+                print(f"💰  FOUND {item}! Taking it...", end="", flush=True)
+                response = handle_items(item)
+                status_message(response)
+                if "errors" in response and not response["errors"]:
+                    print(f"😄  TOOK {item} ✅")
+                    print(f"🎒  INVENTORY: {', '.join(player.inventory)}")
 
-                    cooldown = response["cooldown"]
-                    time.sleep(cooldown)
-                    if "errors" in response and response["errors"]:
-                        print(response["errors"])
+                cooldown = response["cooldown"]
+                time.sleep(cooldown)
+                if "errors" in response and response["errors"]:
+                    print(response["errors"])
 
     print()
     for field in ["Description", "Terrain", "Elevation", "Players", "Items", "Cooldown"]:

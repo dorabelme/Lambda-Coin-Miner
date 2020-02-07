@@ -7,6 +7,7 @@ from mine import proof_of_work, valid_proof
 from graphutils import graph, Queue
 from dotenv import load_dotenv
 from itertools import groupby
+from player import Player
 import operator
 import time
 
@@ -143,6 +144,7 @@ def move_to_location(player, destination):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        move_to_location(int(sys.argv[1]))
+        player = Player()
+        move_to_location(player, int(sys.argv[1]))
     else:
         print(f"Usage: {sys.argv[0]} <destination room id>")
