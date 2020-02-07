@@ -1,5 +1,3 @@
-import json
-
 
 class Queue():
     def __init__(self):
@@ -43,30 +41,11 @@ class Graph:
         self.rooms = {}
         self.vertices = {}
 
-    def load_graph(self, filename):
-        """
-        Load graph from file.
-        """
-        try:
-            with open(filename) as json_file:
-                data = json.load(json_file)
-                print(len(data))
-                for room in data:
-                    self.add_room(data[room], from_file=True)
-        except IOError as e:
-            print(e)
-        finally:
-            print("Graph loaded successfully!")
-
-    def add_room(self, room, from_file=False):
+    def add_room(self, room):
         """
         Add a room to the graph.
         """
-        if from_file:
-            self.rooms[room["room_id"]] = room
-            self.vertices[room["room_id"]] = set(
-                [room_id for room_id in room["exits"].values()])
-        elif room["room_id"] not in self.rooms:
+        if room["room_id"] not in self.rooms:
             self.rooms[room["room_id"]] = room
             self.rooms[room["room_id"]]["exits"] = {
                 x: '?' for x in room["exits"]}
@@ -87,7 +66,7 @@ class Graph:
         """
         Add a directed edge to the graph.
         """
-        reverse_dir = {'n': 's', 'e': 'w', 's': 'n', 'w': 'e', 'warp': 'warp'}[direction]
+        reverse_dir = {'n': 's', 'e': 'w', 's': 'n', 'w': 'e'}[direction]
 
         if room1_id in self.rooms and room2_id in self.rooms:
             self.rooms[room1_id]["exits"][direction] = room2_id
@@ -113,17 +92,16 @@ class Graph:
             next_room = path.pop(0)
             reverse_keys = {value: key for key,
                             value in self.rooms[current_room]["exits"].items()}
-            traversal.append(
-                (reverse_keys[next_room], next_room, self.rooms[next_room]['elevation']))
+            traversal.append(reverse_keys[next_room])
             current_room = next_room
         return traversal
 
     def explore_bfs(self, starting_room):
         """
         Return a list containing the shortest path from
-        starting_room to unexplored room.
+        starting_room to destination_room in
+        breadth-first order.
         """
-
         # Create an empty queue and enqueue the starting room ID
         q = Queue()
         q.enqueue([starting_room])
@@ -218,7 +196,7 @@ class Graph:
             current_vertex = path[-1]
             # And if it is the current vertex, we're done searching
             if current_vertex == destination_vertex:
-                return self.path_to_directions(path)
+                return path
 
             # print(current_vertex, visited)
             # If the vertex has not been visited
@@ -232,20 +210,3 @@ class Graph:
                     q.enqueue(new_path)
 
         return None
-
-
-# TEST FILE LOADING
-graph = Graph()
-# graph.load_graph('map.json')
-
-# Load the merged light and dark world maps
-graph.load_graph('mergedmaps.json')
-# And connect edges between them
-for i in range(0, 500):
-    graph.connect_rooms(i, i+500, 'warp')
-
-# # print(json.dumps(graph.rooms))
-
-
-# path  = graph.bfs(0, 495)
-# print(path)

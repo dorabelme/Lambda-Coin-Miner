@@ -87,7 +87,7 @@ class Graph:
         """
         Add a directed edge to the graph.
         """
-        reverse_dir = {'n': 's', 'e': 'w', 's': 'n', 'w': 'e', 'warp': 'warp'}[direction]
+        reverse_dir = {'n': 's', 'e': 'w', 's': 'n', 'w': 'e'}[direction]
 
         if room1_id in self.rooms and room2_id in self.rooms:
             self.rooms[room1_id]["exits"][direction] = room2_id
@@ -236,14 +236,7 @@ class Graph:
 
 # TEST FILE LOADING
 graph = Graph()
-# graph.load_graph('map.json')
-
-# Load the merged light and dark world maps
-graph.load_graph('mergedmaps.json')
-# And connect edges between them
-for i in range(0, 500):
-    graph.connect_rooms(i, i+500, 'warp')
-
+graph.load_graph('worldmap.json')
 # # print(json.dumps(graph.rooms))
 
 

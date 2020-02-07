@@ -206,7 +206,7 @@ class Player:
             headers=balance_header,
             cooldown=self.cooldown
         )
-
+        
         self.cooldown = response["cooldown"]
         time.sleep(self.cooldown)
         self.status_update()
@@ -273,7 +273,7 @@ class Player:
         time.sleep(self.cooldown)
         return response
 
-    def dash(self, direction, num_rooms, room_ids):
+    def dash(self, direction, num_rooms, room_id):
         header = {
             "Authorization": f"Token {API_KEY}",
             "Content-Type": "application/json",
@@ -283,7 +283,7 @@ class Player:
             f"{URL}/api/adv/dash/",
             headers=header,
             data={"direction": f"{direction}",
-                  "num_rooms": f"{num_rooms}", "next_room_ids": f"{room_ids}"},
+                  "num_rooms": f"{num_rooms}", "next_room_ids": f"{room_id}"},
             cooldown=self.cooldown
         )
 
@@ -341,6 +341,7 @@ class Player:
         response = dreamy.post(
             f"{URL}/api/adv/warp/",
             headers=header,
+            data={"name": f"{treasure}"},
             cooldown=self.cooldown
         )
 
