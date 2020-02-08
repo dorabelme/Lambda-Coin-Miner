@@ -154,15 +154,16 @@ def ls8(description):
 
 if __name__ == '__main__':
     player = Player()
-    print("Heading to the well!")
-    move_to_location(player, 555)
-    response = player.examine(treasure="Wishing Well")
-    if TESTING:
-        print(response)
-    print("Peering into the well...")
-    ROOM_NR = ls8(response['description'])
-    print("Decoded the location!")
+    while True:
+        print("Heading to the well!")
+        move_to_location(player, 555)
+        response = player.examine(treasure="Wishing Well")
+        if TESTING:
+            print(response)
+        print("Peering into the well...")
+        ROOM_NR = ls8(response['description'])
+        print("Decoded the location!")
 
-    # Move from the well to the new location
-    print("Heading to the snitch!")
-    move_to_location(player, ROOM_NR)
+        # Move from the well to the new location
+        print("Heading to the snitch!")
+        move_to_location(player, ROOM_NR)
