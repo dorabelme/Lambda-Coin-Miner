@@ -115,12 +115,43 @@ while player.gold < 1000 and "User" in player.name:
 
 
 def ls8(description):
+    # Extract just the LS-8 program from the message
     code = description[41:].split('\n')
-    # print(code)
-    # exit()
-    cpu = CPU()
-    cpu.load(code)
-    message = cpu.run()[-3:]
+
+    # Relevant portion of the program that calculates the room number
+    #
+    # 10000010 LDI R1, VALUE_1      # Load R1 register with VALUE_1
+    # 00000001
+    # VALUE_1
+    # 10000010 LDI R3, VALUE_2      # Load R3 register with VALUE_2
+    # 00000010
+    # VALUE_2
+    # 10101000 AND R1, R3           # Calculate R1 & R3 and store in R1
+    # 00000001
+    # 00000010
+    # 10000010 LDI R3, VALUE_3      # Load R3 register with VALUE_3
+    # 00000010
+    # VALUE_3
+    # 10101011 XOR R1, R3           # Calculate R1 ^ R3 and store in R1
+    # 00000001
+    # 00000010
+    # 01001000 PRA R1               # Print ASCII digit corresponding to the value in R1
+    # 00000001
+    # 00000001 HLT                  # Halt the CPU
+
+    # Call the LS-8 emulator to run the program
+    # cpu = CPU()
+    # cpu.load(code)
+    # message = cpu.run()[-3:]
+
+    # Bypass LS-8 emulation by applying same math in the following LS-8
+    message = chr(int(f"0b{code[122]}", 2) & int(
+        f"0b{code[125]}", 2) ^ int(f"0b{code[131]}", 2))
+    message += chr(int(f"0b{code[139]}", 2) & int(
+        f"0b{code[142]}", 2) ^ int(f"0b{code[148]}", 2))
+    message += chr(int(f"0b{code[156]}", 2) & int(
+        f"0b{code[159]}", 2) ^ int(f"0b{code[165]}", 2))
+
     return int(message)
 
 

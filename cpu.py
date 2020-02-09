@@ -190,6 +190,7 @@ class CPU:
         operand_a = self.ram_read(self.pc + 1)
         # print(chr(self.reg[operand_a]), end="", flush=True)
         self.message += chr(self.reg[operand_a])
+        print(chr(self.reg[operand_a]), end="", flush=True)
 
         return (2, True)
 
@@ -324,6 +325,7 @@ class CPU:
         running = True
 
         while running:
+            # self.trace()
             instruction_register = self.ram_read(self.pc)
             # print(instruction_register)
 
@@ -343,5 +345,5 @@ class CPU:
                 print(f"Error: Instruction {instruction_register} not found!")
                 # print(e)
                 sys.exit(1)
-        
+
         return self.message
