@@ -144,7 +144,7 @@ def ls8(description):
     # cpu.load(code)
     # message = cpu.run()[-3:]
 
-    # Bypass LS-8 emulation by applying same math in the following LS-8
+    # Bypass LS-8 emulation by applying equivalent math to extracted values from key locations in the received code
     PC = 117
     message = chr(int(f"0b{code[PC]}", 2) & int(
         f"0b{code[PC+3]}", 2) ^ int(f"0b{code[PC+9]}", 2))
