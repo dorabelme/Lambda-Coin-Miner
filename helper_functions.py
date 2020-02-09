@@ -109,7 +109,7 @@ def move_to_location(player, path):
         if player.encumbrance < player.strength - 1 and player.room_items:
             item = player.room_items[0]
             print(f"💰  FOUND {item}! Taking it...", end="", flush=True)
-            response = handle_items(item)
+            response = handle_items(player, item)
             status_message(response)
             if "errors" in response and not response["errors"]:
                 print(f"😄  TOOK {item}")

@@ -175,12 +175,13 @@ def ls8(description):
     # message = cpu.run()[-3:]
 
     # Bypass LS-8 emulation by applying same math in the following LS-8
-    message = chr(int(f"0b{code[122]}", 2) & int(
-        f"0b{code[125]}", 2) ^ int(f"0b{code[131]}", 2))
-    message += chr(int(f"0b{code[139]}", 2) & int(
-        f"0b{code[142]}", 2) ^ int(f"0b{code[148]}", 2))
-    message += chr(int(f"0b{code[156]}", 2) & int(
-        f"0b{code[159]}", 2) ^ int(f"0b{code[165]}", 2))
+    PC = 122
+    message = chr(int(f"0b{code[PC]}", 2) & int(
+        f"0b{code[PC+3]}", 2) ^ int(f"0b{code[PC+9]}", 2))
+    message += chr(int(f"0b{code[PC+17]}", 2) & int(
+        f"0b{code[PC+20]}", 2) ^ int(f"0b{code[PC+26]}", 2))
+    message += chr(int(f"0b{code[PC+34]}", 2) & int(
+        f"0b{code[PC+37]}", 2) ^ int(f"0b{code[PC+43]}", 2))
 
     return int(message)
 
