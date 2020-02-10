@@ -30,6 +30,18 @@ def move_to_location(player, destination):
     optimized_path = [(k, list(g))
                       for k, g in groupby(path, operator.itemgetter(0, 2))]
 
+    # Downhill dash support
+    (cur_dir, cur_elev), cur_rooms = optimized_path[0]
+    cur_idx, next_idx = 0, 1
+    while next_idx < len(optimized_path):
+        (next_dir, next_elev), next_rooms = optimized_path[next_idx]
+        if next_dir == cur_dir and next_elev < cur_elev:
+            optimized_path[cur_idx][1].append(optimized_path[next_idx][1][0])
+            del optimized_path[next_idx]
+        else:
+            (cur_dir, cur_elev), cur_rooms = optimized_path[next_idx]
+            cur_idx, next_idx = next_idx, next_idx + 1
+
     distance = len(path)
     moves = len(optimized_path)
     print(
