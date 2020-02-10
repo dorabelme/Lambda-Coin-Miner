@@ -1,16 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
-import sys
-from dreamy import dreamy
-from mine import proof_of_work, valid_proof
-from graphutils import graph, Queue
+from graphutils import graph
 from player import Player
 from dotenv import load_dotenv
 from itertools import groupby
+from helper_functions import ls8, status_message, pluralize, handle_items
 import operator
 import time
-import random
 from cpu import CPU
 
 load_dotenv()
@@ -24,32 +21,6 @@ API_KEY = MAIN_API_KEY if not TESTING else TEST_API_KEY
 URL = MAIN_URL if not TESTING else TEST_URL
 
 
-def handle_items(player, item):
-    response = player.take_treasure(item)
-    # If boots or jacket have been picked up and are not already being worn, wear them
-    if ("boots" in item and not player.footwear) or ("jacket" in item and not player.bodywear):
-        player.wear_item(item)
-
-    return response
-
-
-def status_message(response):
-    if "errors" in response and response["errors"]:
-        print("\b\b\b ❌")
-        print(response["errors"])
-    else:
-        print("\b\b\b ✅")
-    if TESTING:
-        print(response)
-
-
-def pluralize(word, items):
-    if items > 1:
-        return f"{word}s"
-    else:
-        return word
-
-
 def move_to_location(player, destination):
     path = graph.bfs(player.current_room, destination)
     if not path:
@@ -59,13 +30,24 @@ def move_to_location(player, destination):
     optimized_path = [(k, list(g))
                       for k, g in groupby(path, operator.itemgetter(0, 2))]
 
+    # Downhill dash support
+    (cur_dir, cur_elev), cur_rooms = optimized_path[0]
+    cur_idx, next_idx = 0, 1
+    while next_idx < len(optimized_path):
+        (next_dir, next_elev), next_rooms = optimized_path[next_idx]
+        if next_dir == cur_dir and next_elev < cur_elev:
+            optimized_path[cur_idx][1].append(optimized_path[next_idx][1][0])
+            del optimized_path[next_idx]
+        else:
+            (cur_dir, cur_elev), cur_rooms = optimized_path[next_idx]
+            cur_idx, next_idx = next_idx, next_idx + 1
+
     distance = len(path)
     moves = len(optimized_path)
     print(
         f"\n🎫  ITINERARY: {distance} {pluralize('room', distance)} in {moves} {pluralize('move', moves)}")
     print("=================================")
 
-    prev_elev = None
     cur_room = player.current_room
     nice_directions = {'n': 'North', 's': 'South', 'e': 'East', 'w': 'West'}
     if TESTING:
@@ -93,7 +75,7 @@ def move_to_location(player, destination):
             next_rooms = ','.join([str(room[1]) for room in rooms])
             next_rooms_nice = ','.join([str(room[1]) for room in rooms[:-1]])
             print(
-                f"🏃  DASHING {nice_directions[direction]} from room {cur_room} through [{next_rooms_nice}] to {destination}...", end="", flush=True)
+                f"🏃  DASHING {nice_directions[direction]} from room {cur_room} through {next_rooms_nice} to {destination}...", end="", flush=True)
 
             response = player.dash(direction, len(rooms), next_rooms)
             status_message(response)
@@ -110,53 +92,26 @@ def move_to_location(player, destination):
             response = player.wise_explorer(direction, destination)
             status_message(response)
 
-        prev_elev, cur_room = elevation, destination
+        cur_room = destination
         count += 1
 
-        if player.encumbrance < player.strength - 1 and player.room_items:
-            for item in player.room_items:
-                if "snitch" in item:
-                    print(f"💰  FOUND {item}! Taking it...", end="", flush=True)
-                    response = handle_items(player, item)
-                    status_message(response)
-                    if "errors" in response and not response["errors"]:
-                        print(f"😄  TOOK {item} ✅")
-                        print(f"🎒  INVENTORY: {', '.join(player.inventory)}")
+        for item in player.room_items:
+            if "snitch" in item:
+                print(f"💰  FOUND {item}! Taking it...", end="", flush=True)
+                response = handle_items(player, item)
+                status_message(response)
+                if "errors" in response and not response["errors"]:
+                    print(f"😄  TOOK {item} ✅")
 
-                    cooldown = response["cooldown"]
-                    time.sleep(cooldown)
-                    if "errors" in response and response["errors"]:
-                        print(response["errors"])
-
-    print()
-    for field in ["Description", "Terrain", "Elevation", "Players", "Items", "Cooldown"]:
-        if field.lower() in response:
-            val = response[field.lower()]
-            if val:
-                print(f"{field.upper()}: ", end="", flush=True)
-                if not isinstance(val, list):
-                    print(val)
-                else:
-                    if field == "Players":
-                        values = "👤  " + " 👤  ".join(val)
-                    else:
-                        values = ", ".join(val)
-                    print(values)
-
-    player.current_room = cur_room
-
-
-def ls8(description):
-    code = description[41:].split('\n')
-    cpu = CPU()
-    cpu.load(code)
-    message = cpu.run()[-3:]
-    return int(message)
+                cooldown = response["cooldown"]
+                time.sleep(cooldown)
+                if "errors" in response and response["errors"]:
+                    print(response["errors"])
 
 
 if __name__ == '__main__':
     player = Player()
-    while player.encumbrance < player.strength - 1:
+    while True:
         print("Heading to the well!")
         move_to_location(player, 555)
         response = player.examine(treasure="Wishing Well")
