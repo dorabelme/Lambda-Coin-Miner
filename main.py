@@ -1,17 +1,8 @@
-import time
-import requests
-import hashlib
-import random
 import os
-import re
 
-from cpu import CPU
-
-from mine import proof_of_work, valid_proof
-from helper_functions import handle_items, move_to_location, mine
+from helper_functions import move_to_location, mine, ls8
 from graphutils import graph
 from player import Player
-from dreamy import dreamy
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -64,8 +55,7 @@ while player.gold < 1000 and "User" in player.name:
     #         print(f"Took {item}.\nCurrent items: {player.inventory}")
 
     # # Go back to the shop and sell the item
-    # path = graph.bfs(player.current_room, 1)
-    # move_to_location(player, path)
+    # move_to_location(player, 1)
     # for item in player.inventory:
     #     if "treasure" in item:
     #         player.sell_treasure(item)
@@ -73,8 +63,7 @@ while player.gold < 1000 and "User" in player.name:
 
     # While 1000 gold, make way to pirate ry.
     while player.gold >= 10000:
-        path = graph.bfs(player.current_room, 467)
-        move_to_location(player, path)
+        move_to_location(player, 467)
 
     # At pirate ry, change name.
     name = NAME
@@ -85,82 +74,33 @@ while player.gold < 1000 and "User" in player.name:
     # time.sleep(cooldown)
 
 # Go to the Transmogrify
-# path = graph.bfs(player.current_room, 495)
-# move_to_location(player, path)
+# move_to_location(player, 495)
 # print("Transmogrify!")
 # exit()
 
 # Go to the shrine, and use pray function
-# path = graph.bfs(player.current_room, 22)
-# move_to_location(player, path)
+# move_to_location(player, 22)
 # print("PRAYING!")
 # player.pray()
 
 # print("Mining")
-# path = graph.bfs(player.current_room, 195)
-# move_to_location(player, path)
 # response = player.init_player()
 # print(response)
 # mine(player)
 # print(response)
 # exit()
-# path = graph.bfs(player.current_room, 461)
-# move_to_location(player, path)
+# move_to_location(player, 461)
 # print("Praying for dash")
 # player.pray()
 # exit()
 
 # solve multiple puzzle with ls-8 and mine coins
-# pattern = re.compile('/\d+(?=\D)/g')
-
-
-def ls8(description):
-    # Extract just the LS-8 program from the message
-    code = description[41:].split('\n')
-
-    # Relevant portion of the program that calculates the room number
-    #
-    # 10000010 LDI R1, VALUE_1      # Load R1 register with VALUE_1
-    # 00000001
-    # VALUE_1
-    # 10000010 LDI R3, VALUE_2      # Load R3 register with VALUE_2
-    # 00000010
-    # VALUE_2
-    # 10101000 AND R1, R3           # Calculate R1 & R3 and store in R1
-    # 00000001
-    # 00000010
-    # 10000010 LDI R3, VALUE_3      # Load R3 register with VALUE_3
-    # 00000010
-    # VALUE_3
-    # 10101011 XOR R1, R3           # Calculate R1 ^ R3 and store in R1
-    # 00000001
-    # 00000010
-    # 01001000 PRA R1               # Print ASCII digit corresponding to the value in R1
-    # 00000001
-    # 00000001 HLT                  # Halt the CPU
-
-    # Call the LS-8 emulator to run the program
-    # cpu = CPU()
-    # cpu.load(code)
-    # message = cpu.run()[-3:]
-
-    # Bypass LS-8 emulation by applying equivalent math to extracted values from key locations in the received code
-    PC = 117
-    message = chr(int(f"0b{code[PC]}", 2) & int(
-        f"0b{code[PC+3]}", 2) ^ int(f"0b{code[PC+9]}", 2))
-    message += chr(int(f"0b{code[PC+17]}", 2) & int(
-        f"0b{code[PC+20]}", 2) ^ int(f"0b{code[PC+26]}", 2))
-    message += chr(int(f"0b{code[PC+34]}", 2) & int(
-        f"0b{code[PC+37]}", 2) ^ int(f"0b{code[PC+43]}", 2))
-
-    return int(message)
 
 
 # maybe loop through once to start?
 for i in range(0, 100):
     print("Heading to the well!")
-    path = graph.bfs(player.current_room, 55)
-    move_to_location(player, path)
+    move_to_location(player, 55, PICKUP_ENABLED=False)
     response = player.examine(treasure="Wishing Well")
     if TESTING:
         print(response)
@@ -172,8 +112,7 @@ for i in range(0, 100):
 
     # Move from the well to the new location
     print("Heading to the mine!")
-    path = graph.bfs(player.current_room, ROOM_NR)
-    move_to_location(player, path)
+    move_to_location(player, ROOM_NR, PICKUP_ENABLED=False)
 
     # Mine at new location
     response = mine(player)
@@ -182,6 +121,3 @@ for i in range(0, 100):
         response = mine(player)
     answer = player.balance()
     print(f"Current balance: {answer}")
-
-    path = graph.bfs(player.current_room, 55)
-    move_to_location(player, path)

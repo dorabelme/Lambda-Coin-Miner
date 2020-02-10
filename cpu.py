@@ -346,4 +346,4 @@ class CPU:
                 # print(e)
                 sys.exit(1)
 
-        return self.message
+        return self.message + "\n"
