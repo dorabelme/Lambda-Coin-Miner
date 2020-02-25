@@ -7,7 +7,7 @@ Built for ***Lambda Treasure Hunt***. The project contained traversing two mazes
 ### Lambda Coin Miner
 
 <p align ="center">
-<img src="./miner.gif" alt="Miner demo">
+<img src="./lambda-coin-mining.png" alt="Miner demo">
 </p>
 
 ### Lambda Coins
